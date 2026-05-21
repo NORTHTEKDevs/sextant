@@ -30,8 +30,15 @@ That's the whole API surface for one primitive. There are four of them.
 |---|---|---|
 | `cove` | [Dhuliawala et al. 2023 (Meta)](https://arxiv.org/abs/2309.11495) | Chain-of-Verification. Generate, plan verification questions, answer each independently, revise. Reduces hallucination on long-form factual answers. |
 | `self_consistency` | [Wang et al. 2022](https://arxiv.org/abs/2203.11171) | Sample N completions at temperature > 0, return the plurality answer. Beats greedy decoding on reasoning benchmarks by 10-20 points. |
-| `DriftDetector` | adapted from Lyu et al. 2024 + Welford's algorithm | Per-bucket rolling embedding centroid + exponentially-weighted variance. Flags traffic-shape changes (abuse, eval-set staleness, prompt drift) with a z-score. |
+| `best_of_n` | classic test-time compute pattern | Sample N, score each with a scorer fn (LLM-as-judge, length, keywords, or your own reward model), return the highest-scoring. The natural companion to self-consistency for open-ended tasks. |
+| `DriftDetector` | rolling embedding centroid + Welford's variance | Per-bucket drift detection. Flags traffic-shape changes (abuse, eval-set staleness, prompt drift) via z-score with absolute-distance fallback. |
 | `race` | [Dean & Barroso "The Tail at Scale" 2013](https://research.google/pubs/the-tail-at-scale/) | Hedged execution. Race N callables in parallel, return whichever finishes first. Generic -- not LLM-specific. |
+
+**Async parity.** Every primitive has an async sibling under `sextant.asyncio`:
+`acove`, `aself_consistency`, `abest_of_n`, `arace`. The N-sample primitives
+(`aself_consistency`, `abest_of_n`) parallelize their LLM calls with
+`asyncio.gather` -- so what would have been 5x sequential latency becomes
+~1x concurrent.
 
 All four are **backend-agnostic**: each takes a callable, not a client.
 You can use them with any provider, in any combination, in any framework.
@@ -225,6 +232,67 @@ shards, whatever.
 In practice the losers get cancelled mid-flight (HTTP connections closed,
 provider calls aborted) so you pay closer to 1.2× -- 1.5× for major tail
 latency wins.
+
+---
+
+## 5. `best_of_n` -- sample-and-score
+
+The natural companion to self-consistency. Where self-consistency uses
+*voting* to pick the answer, `best_of_n` uses a *scorer function*:
+
+```python
+from sextant import best_of_n, llm_judge_scorer
+from sextant.adapters import openai_complete
+
+complete = openai_complete(OpenAI(), model="gpt-4o-mini", temperature=0.7)
+judge    = openai_complete(OpenAI(), model="gpt-4o-mini", temperature=0.0)
+
+r = best_of_n(
+    complete,
+    messages=[{"role": "user", "content": "Write a haiku about Anchorage."}],
+    scorer=llm_judge_scorer(judge,
+        rubric="Rate this haiku 0-10 on imagery, meter, and surprise. "
+                "Respond with only the number."),
+    n=5,
+)
+print(r.answer)         # winning haiku
+print(r.scores)         # all 5 scores
+```
+
+When to use which:
+
+| | self_consistency | best_of_n |
+|---|---|---|
+| Task has a discrete answer | yes (vote on it) | overkill |
+| Task is open-ended | no (no token to vote on) | yes (score each) |
+| You have a reward model | not used | plug it in as `scorer` |
+| You want LLM-as-judge | no | yes (use `llm_judge_scorer`) |
+
+Three scorer factories are included: `llm_judge_scorer`, `length_scorer`,
+`keyword_scorer`. You can also pass any `Callable[[str], float]`.
+
+---
+
+## Async API
+
+Every primitive has an async sibling:
+
+```python
+from sextant.asyncio import acove, aself_consistency, abest_of_n, arace
+
+# N samples run concurrently instead of sequentially:
+result = await aself_consistency(async_complete, messages=[...], n=10)
+
+# Race async coroutines:
+result = await arace([
+    ("openai",    lambda: openai_complete_async(msgs)),
+    ("anthropic", lambda: anthropic_complete_async(msgs)),
+])
+```
+
+For `aself_consistency` and `abest_of_n`, this turns N x latency into ~1 x
+latency. For `acove`, the N verification answers fan out concurrently
+(steps 1, 2, 4 are still sequential because they depend on each other).
 
 ---
 

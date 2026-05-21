@@ -20,26 +20,46 @@ Quick start:
   print(result.final)
 """
 
+from sextant.best_of_n import (
+    BestOfNResult, ScoreFn, best_of_n,
+    keyword_scorer, length_scorer, llm_judge_scorer,
+)
 from sextant.cove import CoVeResult, CoVeStep, cove
 from sextant.drift import DriftDetector, DriftSample
 from sextant.hedged import HedgeResult, race
 from sextant.self_consistency import SelfConsistencyResult, self_consistency
-from sextant.types import CompleteFn, EmbedFn, Message
+from sextant.types import (
+    AsyncCompleteFn, AsyncEmbedFn, CompleteFn, EmbedFn, Message,
+)
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 __all__ = [
     "__version__",
+    # types
     "Message",
     "CompleteFn",
     "EmbedFn",
+    "AsyncCompleteFn",
+    "AsyncEmbedFn",
+    # CoVe
     "cove",
     "CoVeResult",
     "CoVeStep",
+    # Self-consistency
     "self_consistency",
     "SelfConsistencyResult",
+    # Best-of-N
+    "best_of_n",
+    "BestOfNResult",
+    "ScoreFn",
+    "llm_judge_scorer",
+    "length_scorer",
+    "keyword_scorer",
+    # Drift
     "DriftDetector",
     "DriftSample",
+    # Hedged execution
     "race",
     "HedgeResult",
 ]
