@@ -31,6 +31,16 @@ from sextant.best_of_n import (
 from sextant.cove import CoVeResult, CoVeStep, cove
 from sextant.drift import DriftDetector, DriftSample
 from sextant.hedged import HedgeResult, race
+from sextant.reflexion import (
+    CriticFn,
+    CriticVerdict,
+    ReflexionResult,
+    ReflexionStep,
+    llm_critic,
+    programmatic_critic,
+    reflexion,
+    test_critic,
+)
 from sextant.self_consistency import SelfConsistencyResult, self_consistency
 from sextant.types import (
     AsyncCompleteFn,
@@ -40,7 +50,7 @@ from sextant.types import (
     Message,
 )
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 
 __all__ = [
     "__version__",
@@ -64,6 +74,15 @@ __all__ = [
     "llm_judge_scorer",
     "length_scorer",
     "keyword_scorer",
+    # Reflexion
+    "reflexion",
+    "ReflexionResult",
+    "ReflexionStep",
+    "CriticFn",
+    "CriticVerdict",
+    "llm_critic",
+    "programmatic_critic",
+    "test_critic",
     # Drift
     "DriftDetector",
     "DriftSample",

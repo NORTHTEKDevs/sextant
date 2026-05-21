@@ -6,13 +6,39 @@ versioning follows [SemVer](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+(no unreleased changes)
+
+## [0.3.0] - 2026-05-21
+
 ### Added
 
-- **CLI:** `python -m sextant cove "<query>"` (also `self_consistency`,
-  `best_of_n`, `drift`). Works offline against the echo stub or with
-  `OPENAI_API_KEY` against gpt-4o-mini. Supports `--json` for piping.
+- **`reflexion`** primitive -- iterative try -> critique -> retry loop based
+  on Shinn et al. 2023 (arxiv 2303.11366). Two critic factories: `llm_critic`
+  (LLM-as-judge, passes on "PASS" substring) and `programmatic_critic` (wrap
+  your own test function). Strictly stronger than best-of-N when you have a
+  verifiable signal -- critic feedback flows into the next attempt.
+- **`areflexion`** async variant in `sextant.asyncio`.
+- **Gemini adapter** (`gemini_complete`, `gemini_embed`) for
+  `google.generativeai`. Accepts either a module or a `GenerativeModel`.
+- **Groq adapter** (`groq_complete`) -- OpenAI-shaped, drop-in.
+- **OpenAI-compatible URL adapter** (`openai_compatible_complete`,
+  `openai_compatible_embed`) -- zero SDK deps, works with vLLM, llama.cpp,
+  Together, Fireworks, DeepSeek, Anyscale, Perplexity, LM Studio,
+  Ollama (`/v1`), etc.
+- New CLI subcommand: `python -m sextant cove`, `self_consistency`,
+  `best_of_n`, `drift`.
 - README badges (CI, license, Python version) and a clear "Releasing to
   PyPI" section documenting the trusted-publisher setup.
+- `examples/reflexion_code.py` -- Reflexion with real unit-test feedback
+  on a code-generation task.
+
+### Changed
+
+- `test_critic` renamed to `programmatic_critic` (the old name is kept as
+  a backwards-compatible alias, with `__test__ = False` set so pytest
+  doesn't try to collect it as a test function).
+- Adapter coverage: the "any LLM API" claim is now backed by adapters for
+  OpenAI, Anthropic, Gemini, Groq, and any OpenAI-compatible HTTP endpoint.
 
 ## [0.2.0] - 2026-05-21
 

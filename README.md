@@ -4,9 +4,9 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue)](https://github.com/NORTHTEKDevs/sextant)
 
-**Five reliability primitives for any LLM API.** No new framework, no SDK
-lock-in -- just five small modules that wrap whatever provider you already
-use (OpenAI, Anthropic, Gemini, Groq, vLLM, local llama.cpp, anything).
+**Six reliability primitives for any LLM API.** No new framework, no SDK
+lock-in -- just six small modules that wrap whatever provider you already
+use (OpenAI, Anthropic, Gemini, Groq, vLLM, llama.cpp, anything OpenAI-compat).
 
 ```bash
 pip install sextant            # once published to PyPI
@@ -37,6 +37,7 @@ That's the whole API surface for one primitive. There are four of them.
 | `cove` | [Dhuliawala et al. 2023 (Meta)](https://arxiv.org/abs/2309.11495) | Chain-of-Verification. Generate, plan verification questions, answer each independently, revise. Reduces hallucination on long-form factual answers. |
 | `self_consistency` | [Wang et al. 2022](https://arxiv.org/abs/2203.11171) | Sample N completions at temperature > 0, return the plurality answer. Beats greedy decoding on reasoning benchmarks by 10-20 points. |
 | `best_of_n` | classic test-time compute pattern | Sample N, score each with a scorer fn (LLM-as-judge, length, keywords, or your own reward model), return the highest-scoring. The natural companion to self-consistency for open-ended tasks. |
+| `reflexion` | [Shinn et al. 2023](https://arxiv.org/abs/2303.11366) | Iterative try -> critique -> retry loop. Critic feedback is fed back into the next attempt, so the model learns from its mistakes within one conversation. Plug in an LLM critic or a programmatic test (unit tests, JSON schema, exact match). |
 | `DriftDetector` | rolling embedding centroid + Welford's variance | Per-bucket drift detection. Flags traffic-shape changes (abuse, eval-set staleness, prompt drift) via z-score with absolute-distance fallback. |
 | `race` | [Dean & Barroso "The Tail at Scale" 2013](https://research.google/pubs/the-tail-at-scale/) | Hedged execution. Race N callables in parallel, return whichever finishes first. Generic -- not LLM-specific. |
 
@@ -302,6 +303,44 @@ latency. For `acove`, the N verification answers fan out concurrently
 
 ---
 
+## 6. `reflexion` -- iterative try / critique / retry
+
+```python
+from sextant import reflexion, programmatic_critic
+from sextant.adapters import openai_complete
+
+complete = openai_complete(OpenAI(), model="gpt-4o-mini", temperature=0.3)
+
+def my_critic(candidate: str) -> tuple[bool, str]:
+    # Run the candidate against unit tests, JSON schema, exact-match,
+    # whatever you have a verifiable signal for.
+    if "FizzBuzz" in candidate and "Fizz" in candidate:
+        return True, "PASS"
+    return False, "missing FizzBuzz handling"
+
+r = reflexion(
+    complete,
+    query="Write fizzbuzz(n: int) in Python.",
+    critic=programmatic_critic(my_critic),
+    max_iterations=4,
+)
+
+print(f"passed: {r.passed}  iterations: {r.iterations}")
+print(r.final)
+```
+
+The critic's feedback is concatenated into the next attempt's prompt so
+the model gets to "see" what went wrong. Strictly stronger than best-of-N
+when you have a verifiable signal -- it learns from each failure within
+the same conversation.
+
+Two built-in critic factories:
+- **`llm_critic(complete, rubric=...)`** -- LLM-as-judge; passes when
+  the verdict contains "PASS".
+- **`programmatic_critic(fn)`** -- wraps your own `(candidate) -> (passed, feedback)`.
+
+---
+
 ## Adapters (optional)
 
 `sextant.adapters` includes thin wrappers for the popular SDKs so you
@@ -309,11 +348,22 @@ don't have to write the `(messages) -> str` glue yourself:
 
 ```python
 from sextant.adapters import (
-    openai_complete,       # any openai.OpenAI() client
+    # Provider SDKs (no hard dep -- only loaded when you call it)
+    openai_complete,            # openai.OpenAI() client -> CompleteFn
     openai_embed,
-    anthropic_complete,    # any anthropic.Anthropic() client
-    echo_complete,         # deterministic stub for tests
-    varying_echo_complete, # cycling stub for self_consistency tests
+    anthropic_complete,         # anthropic.Anthropic() client
+    gemini_complete,            # google.generativeai.GenerativeModel() or module
+    gemini_embed,
+    groq_complete,              # groq.Groq() client (OpenAI-shaped)
+
+    # Zero-SDK HTTP path -- works with anything OpenAI-compatible
+    openai_compatible_complete, # vLLM, llama.cpp, Together, Fireworks, DeepSeek,
+                                # Anyscale, Perplexity, LM Studio, Ollama (/v1), ...
+    openai_compatible_embed,
+
+    # Test stubs (deterministic, no network)
+    echo_complete,
+    varying_echo_complete,
 )
 ```
 

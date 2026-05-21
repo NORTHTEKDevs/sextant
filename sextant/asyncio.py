@@ -1,4 +1,4 @@
-"""Async versions of the four primitives.
+"""Async versions of the primitives.
 
 The big win here is that self_consistency and best_of_n are embarrassingly
 parallel -- N independent LLM calls. Sync versions serialize them; async
@@ -9,11 +9,8 @@ Public API:
   acove(...)              Chain-of-Verification, with N+2 awaits.
   aself_consistency(...)  Sample N concurrently, vote.
   abest_of_n(...)         Sample N concurrently, score (optionally async), pick.
+  areflexion(...)         Iterative try -> critique -> retry loop.
   arace(...)              Race async coroutines, return first to complete.
-
-All take AsyncCompleteFn (or AsyncCompleteFn + sync scorer for abest_of_n)
-instead of sync CompleteFn. Adapters for OpenAI / Anthropic async clients
-are in sextant.adapters_async.
 """
 
 from __future__ import annotations
@@ -35,6 +32,12 @@ from sextant.cove import (
     _split_questions,
 )
 from sextant.hedged import HedgeResult
+from sextant.reflexion import (
+    _INITIAL_TEMPLATE,
+    _RETRY_TEMPLATE,
+    ReflexionResult,
+    ReflexionStep,
+)
 from sextant.self_consistency import (
     SelfConsistencyResult,
     _extract,
@@ -245,3 +248,64 @@ async def arace(
         for t in tasks:
             if not t.done():
                 t.cancel()
+
+
+# ---- Async Reflexion ----------------------------------------------------
+
+AsyncCriticFn = Callable[[str], Awaitable[tuple[bool, str]]]
+
+
+async def areflexion(
+    complete: AsyncCompleteFn,
+    query: str,
+    critic: Callable[[str], tuple[bool, str]] | AsyncCriticFn,
+    max_iterations: int = 4,
+    system: str | None = None,
+) -> ReflexionResult:
+    """Async iterative try -> critique -> retry loop.
+
+    The critic may be sync or async; if async, it is awaited.
+    """
+    if max_iterations < 1:
+        raise ValueError("max_iterations must be >= 1")
+
+    async def _ask(content: str) -> str:
+        msgs: list[Message] = []
+        if system:
+            msgs.append({"role": "system", "content": system})
+        msgs.append({"role": "user", "content": content})
+        out = await complete(msgs)
+        return (out or "").strip()
+
+    steps: list[ReflexionStep] = []
+    prior_attempt = ""
+    prior_feedback = ""
+
+    for i in range(1, max_iterations + 1):
+        if i == 1:
+            prompt = _INITIAL_TEMPLATE.format(query=query)
+        else:
+            prompt = _RETRY_TEMPLATE.format(
+                query=query, prior=prior_attempt, feedback=prior_feedback)
+        attempt = await _ask(prompt)
+
+        if inspect.iscoroutinefunction(critic):
+            passed, feedback = await critic(attempt)  # type: ignore[misc]
+        else:
+            passed, feedback = critic(attempt)  # type: ignore[misc]
+
+        steps.append(ReflexionStep(
+            iteration=i, attempt=attempt,
+            critic_passed=passed, critic_feedback=feedback,
+        ))
+        if passed:
+            return ReflexionResult(
+                final=attempt, passed=True, iterations=i, steps=steps,
+            )
+        prior_attempt = attempt
+        prior_feedback = feedback
+
+    return ReflexionResult(
+        final=steps[-1].attempt, passed=False,
+        iterations=max_iterations, steps=steps,
+    )

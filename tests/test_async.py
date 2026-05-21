@@ -139,3 +139,52 @@ async def test_arace_survives_failing_callable():
 async def test_arace_empty_raises():
     with pytest.raises(ValueError):
         await arace([])
+
+
+# ---- areflexion ---------------------------------------------------------
+
+@pytest.mark.asyncio
+async def test_areflexion_passes_on_first_attempt():
+    from sextant.asyncio import areflexion
+
+    complete = make_async_complete(["a", "b"])
+
+    def always_pass(_c: str) -> tuple[bool, str]:
+        return True, "PASS"
+
+    r = await areflexion(complete, query="?", critic=always_pass,
+                          max_iterations=3)
+    assert r.passed is True
+    assert r.iterations == 1
+
+
+@pytest.mark.asyncio
+async def test_areflexion_with_async_critic():
+    from sextant.asyncio import areflexion
+
+    complete = make_async_complete(["v1", "v2", "v3"])
+    state = {"calls": 0}
+
+    async def async_critic(_c: str) -> tuple[bool, str]:
+        state["calls"] += 1
+        return (state["calls"] >= 2, "needs work")
+
+    r = await areflexion(complete, query="?", critic=async_critic,
+                          max_iterations=3)
+    assert r.passed is True
+    assert r.iterations == 2
+
+
+@pytest.mark.asyncio
+async def test_areflexion_exhausts_iterations():
+    from sextant.asyncio import areflexion
+
+    complete = make_async_complete(["a", "b", "c"])
+
+    def always_fail(_c):
+        return False, "bad"
+
+    r = await areflexion(complete, query="?", critic=always_fail,
+                          max_iterations=3)
+    assert r.passed is False
+    assert r.iterations == 3
