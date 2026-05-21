@@ -8,6 +8,7 @@ on:
       - "mkdocs.yml"
       - ".github/workflows/docs.yml"
       - "CHANGELOG.md"
+  workflow_dispatch:
 
 permissions:
   contents: read
