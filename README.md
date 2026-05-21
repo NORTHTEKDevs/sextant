@@ -1,25 +1,25 @@
-# sextant
+# lemmas
 
-[![CI](https://github.com/NORTHTEKDevs/sextant/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/NORTHTEKDevs/sextant/actions/workflows/ci.yml)
+[![CI](https://github.com/NORTHTEKDevs/lemmas/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/NORTHTEKDevs/lemmas/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue)](https://github.com/NORTHTEKDevs/sextant)
+[![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue)](https://github.com/NORTHTEKDevs/lemmas)
 
 **Seven reliability primitives for any LLM API.** No new framework, no SDK
 lock-in -- just small modules that wrap whatever provider you already use
 (OpenAI, Anthropic, Gemini, Groq, vLLM, llama.cpp, anything OpenAI-compat).
 
-Docs: **https://NORTHTEKDevs.github.io/sextant/**
+Docs: **https://NORTHTEKDevs.github.io/lemmas/**
 
 ```bash
-pip install sextant            # once published to PyPI
+pip install lemmas            # once published to PyPI
 # or until then:
-pip install git+https://github.com/NORTHTEKDevs/sextant.git
+pip install git+https://github.com/NORTHTEKDevs/lemmas.git
 ```
 
 ```python
 from openai import OpenAI
-from sextant import cove
-from sextant.adapters import openai_complete
+from lemmas import cove
+from lemmas.adapters import openai_complete
 
 complete = openai_complete(OpenAI(), model="gpt-4o-mini")
 result = cove(complete, query="Who invented the laser?")
@@ -44,7 +44,7 @@ That's the whole API surface for one primitive. There are four of them.
 | `DriftDetector` | rolling embedding centroid + Welford's variance | Per-bucket drift detection. Flags traffic-shape changes (abuse, eval-set staleness, prompt drift) via z-score with absolute-distance fallback. |
 | `race` | [Dean & Barroso "The Tail at Scale" 2013](https://research.google/pubs/the-tail-at-scale/) | Hedged execution. Race N callables in parallel, return whichever finishes first. Generic -- not LLM-specific. |
 
-**Async parity.** Every primitive has an async sibling under `sextant.asyncio`:
+**Async parity.** Every primitive has an async sibling under `lemmas.asyncio`:
 `acove`, `aself_consistency`, `abest_of_n`, `arace`. The N-sample primitives
 (`aself_consistency`, `abest_of_n`) parallelize their LLM calls with
 `asyncio.gather` -- so what would have been 5x sequential latency becomes
@@ -78,8 +78,8 @@ dependencies beyond numpy.
 ## 1. CoVe -- Chain-of-Verification
 
 ```python
-from sextant import cove
-from sextant.adapters import anthropic_complete
+from lemmas import cove
+from lemmas.adapters import anthropic_complete
 from anthropic import Anthropic
 
 complete = anthropic_complete(Anthropic(), model="claude-haiku-4-5-20251001")
@@ -117,8 +117,8 @@ print(r.final)
 ## 2. Self-consistency sampling
 
 ```python
-from sextant import self_consistency
-from sextant.adapters import openai_complete
+from lemmas import self_consistency
+from lemmas.adapters import openai_complete
 from openai import OpenAI
 
 # IMPORTANT: bake temperature > 0 into your complete fn.
@@ -153,7 +153,7 @@ print(f"vote counts: {r.vote_counts}")
 **Cost:** N model calls. The original paper recommends N=20-40 for hard
 reasoning benchmarks; N=5 is enough for most tasks.
 
-The `similarity` extractor is sextant-specific -- it lets you do
+The `similarity` extractor is lemmas-specific -- it lets you do
 self-consistency on tasks where there's no discrete answer to vote on
 (summaries, code generation, creative writing). It picks the sample
 nearest the semantic centroid, which empirically picks the "median"
@@ -165,8 +165,8 @@ average.
 ## 3. DriftDetector
 
 ```python
-from sextant import DriftDetector
-from sextant.adapters import openai_embed
+from lemmas import DriftDetector
+from lemmas.adapters import openai_embed
 from openai import OpenAI
 
 embed = openai_embed(OpenAI(), model="text-embedding-3-small")
@@ -210,8 +210,8 @@ detector = DriftDetector(
 ## 4. `race` -- hedged execution
 
 ```python
-from sextant import race
-from sextant.adapters import openai_complete, anthropic_complete
+from lemmas import race
+from lemmas.adapters import openai_complete, anthropic_complete
 
 primary = openai_complete(...)        # gpt-4o
 backup  = anthropic_complete(...)     # claude-haiku
@@ -251,8 +251,8 @@ The natural companion to self-consistency. Where self-consistency uses
 *voting* to pick the answer, `best_of_n` uses a *scorer function*:
 
 ```python
-from sextant import best_of_n, llm_judge_scorer
-from sextant.adapters import openai_complete
+from lemmas import best_of_n, llm_judge_scorer
+from lemmas.adapters import openai_complete
 
 complete = openai_complete(OpenAI(), model="gpt-4o-mini", temperature=0.7)
 judge    = openai_complete(OpenAI(), model="gpt-4o-mini", temperature=0.0)
@@ -288,7 +288,7 @@ Three scorer factories are included: `llm_judge_scorer`, `length_scorer`,
 Every primitive has an async sibling:
 
 ```python
-from sextant.asyncio import acove, aself_consistency, abest_of_n, arace
+from lemmas.asyncio import acove, aself_consistency, abest_of_n, arace
 
 # N samples run concurrently instead of sequentially:
 result = await aself_consistency(async_complete, messages=[...], n=10)
@@ -309,8 +309,8 @@ latency. For `acove`, the N verification answers fan out concurrently
 ## 6. `reflexion` -- iterative try / critique / retry
 
 ```python
-from sextant import reflexion, programmatic_critic
-from sextant.adapters import openai_complete
+from lemmas import reflexion, programmatic_critic
+from lemmas.adapters import openai_complete
 
 complete = openai_complete(OpenAI(), model="gpt-4o-mini", temperature=0.3)
 
@@ -346,11 +346,11 @@ Two built-in critic factories:
 
 ## Adapters (optional)
 
-`sextant.adapters` includes thin wrappers for the popular SDKs so you
+`lemmas.adapters` includes thin wrappers for the popular SDKs so you
 don't have to write the `(messages) -> str` glue yourself:
 
 ```python
-from sextant.adapters import (
+from lemmas.adapters import (
     # Provider SDKs (no hard dep -- only loaded when you call it)
     openai_complete,            # openai.OpenAI() client -> CompleteFn
     openai_embed,
@@ -407,18 +407,18 @@ return result.answer
 
 ---
 
-## What sextant does NOT do
+## What lemmas does NOT do
 
 - **No router.** Use LiteLLM, Portkey, or your own.
 - **No observability backend.** Pipe the result objects to Langfuse, Helicone,
-  Datadog, or print them. Sextant gives you the data; you decide where it goes.
+  Datadog, or print them. Lemmas gives you the data; you decide where it goes.
 - **No retrieval / RAG.** Use LlamaIndex, LangChain, or a real vector DB.
 - **No agent loop.** Use the framework of your choice.
 - **No streaming.** All four primitives operate on complete responses.
   (CoVe needs the full baseline; self-consistency needs full samples;
   hedged execution returns the first complete response; drift is per-prompt.)
 
-These are deliberate. Sextant is a small library, not a framework.
+These are deliberate. Lemmas is a small library, not a framework.
 
 ---
 
@@ -427,7 +427,7 @@ These are deliberate. Sextant is a small library, not a framework.
 - **CoVe** adds N+2 model calls. For 5 questions on Claude Haiku, that's
   ~$0.002 of additional spend per query and ~6× the wall time of greedy.
   Reserve it for high-stakes factual answers.
-- **self_consistency** is embarrassingly parallel; sextant doesn't parallelize
+- **self_consistency** is embarrassingly parallel; lemmas doesn't parallelize
   internally (your `complete` is synchronous), but wrapping it in an async
   caller is straightforward.
 - **DriftDetector** is O(d) per observation where d is the embedding
@@ -439,16 +439,16 @@ These are deliberate. Sextant is a small library, not a framework.
 
 ## CLI
 
-For a quick spin without writing code, `sextant` ships with a tiny CLI:
+For a quick spin without writing code, `lemmas` ships with a tiny CLI:
 
 ```bash
 # Offline (uses the deterministic echo stub):
-python -m sextant cove "Who painted the Mona Lisa?"
-python -m sextant self_consistency "What is 2+2?" --n 3
+python -m lemmas cove "Who painted the Mona Lisa?"
+python -m lemmas self_consistency "What is 2+2?" --n 3
 
 # With a real provider (OpenAI):
-OPENAI_API_KEY=sk-... python -m sextant cove "Where was Marie Curie born?"
-OPENAI_API_KEY=sk-... python -m sextant self_consistency \
+OPENAI_API_KEY=sk-... python -m lemmas cove "Where was Marie Curie born?"
+OPENAI_API_KEY=sk-... python -m lemmas self_consistency \
     "Janet has 16 eggs..." --n 5 --extractor last_number
 ```
 
@@ -459,8 +459,8 @@ Pass `--help` for the full list of subcommands and flags.
 ## Development
 
 ```bash
-git clone https://github.com/NORTHTEKDevs/sextant.git
-cd sextant
+git clone https://github.com/NORTHTEKDevs/lemmas.git
+cd lemmas
 pip install -e .[dev]
 pytest tests/                          # ~6s; no network calls.
 ruff check .
@@ -473,7 +473,7 @@ keys required.
 
 ## Releasing to PyPI
 
-Sextant uses [PyPI Trusted Publishing](https://docs.pypi.org/trusted-publishers/)
+Lemmas uses [PyPI Trusted Publishing](https://docs.pypi.org/trusted-publishers/)
 (OIDC, no manual token). Tag-driven release flow:
 
 ```bash
@@ -486,9 +486,9 @@ One-time setup on PyPI (maintainers only):
 
 1. Sign in at https://pypi.org and go to **Account settings → Publishing**.
 2. Click **Add a new pending publisher** and fill in:
-   - PyPI Project Name: `sextant`
+   - PyPI Project Name: `lemmas`
    - Owner: `NORTHTEKDevs`
-   - Repository name: `sextant`
+   - Repository name: `lemmas`
    - Workflow filename: `release.yml`
    - Environment name: `pypi`
 3. The next tag push will publish automatically.
@@ -497,14 +497,14 @@ One-time setup on PyPI (maintainers only):
 
 ## Citing
 
-If you use sextant in a paper or product writeup:
+If you use lemmas in a paper or product writeup:
 
 ```
-@software{sextant,
+@software{lemmas,
   author = {Baer, Kristian},
-  title  = {Sextant: reliability primitives for LLM APIs},
+  title  = {Lemmas: reliability primitives for LLM APIs},
   year   = {2026},
-  url    = {https://github.com/NORTHTEKDevs/sextant}
+  url    = {https://github.com/NORTHTEKDevs/lemmas}
 }
 ```
 

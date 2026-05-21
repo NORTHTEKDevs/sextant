@@ -4,7 +4,7 @@ The natural companion to `self_consistency`. Where self-consistency uses
 *voting*, best-of-N uses a *scorer*:
 
 ```python
-from sextant import best_of_n, llm_judge_scorer
+from lemmas import best_of_n, llm_judge_scorer
 
 scorer = llm_judge_scorer(
     judge_complete,

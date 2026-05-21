@@ -33,7 +33,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any
 
-from sextant.types import EmbedFn
+from lemmas.types import EmbedFn
 
 
 @dataclass

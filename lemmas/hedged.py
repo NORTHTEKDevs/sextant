@@ -12,7 +12,7 @@ cost. Common applications:
   - critical-path calls where you race a self-hosted model against a
     managed one and fall through if the self-hosted is degraded
 
-Sextant's race is generic: any zero-arg callables work, not just LLM calls.
+Lemmas's race is generic: any zero-arg callables work, not just LLM calls.
 
 Cost model: if all callables eventually succeed, you pay for N x compute.
 If most fail and one succeeds, you pay for ~1 (others get cancelled).

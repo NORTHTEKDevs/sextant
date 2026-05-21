@@ -1,4 +1,4 @@
-"""Tests for sextant.asyncio.
+"""Tests for lemmas.asyncio.
 
 The sync primitives are already tested in their own modules. These tests
 focus on the things async actually changes:
@@ -15,7 +15,7 @@ import time
 
 import pytest
 
-from sextant.asyncio import abest_of_n, acove, arace, aself_consistency
+from lemmas.asyncio import abest_of_n, acove, arace, aself_consistency
 
 # ---- helpers --------------------------------------------------------------
 
@@ -145,7 +145,7 @@ async def test_arace_empty_raises():
 
 @pytest.mark.asyncio
 async def test_areflexion_passes_on_first_attempt():
-    from sextant.asyncio import areflexion
+    from lemmas.asyncio import areflexion
 
     complete = make_async_complete(["a", "b"])
 
@@ -160,7 +160,7 @@ async def test_areflexion_passes_on_first_attempt():
 
 @pytest.mark.asyncio
 async def test_areflexion_with_async_critic():
-    from sextant.asyncio import areflexion
+    from lemmas.asyncio import areflexion
 
     complete = make_async_complete(["v1", "v2", "v3"])
     state = {"calls": 0}
@@ -177,7 +177,7 @@ async def test_areflexion_with_async_critic():
 
 @pytest.mark.asyncio
 async def test_areflexion_exhausts_iterations():
-    from sextant.asyncio import areflexion
+    from lemmas.asyncio import areflexion
 
     complete = make_async_complete(["a", "b", "c"])
 

@@ -3,9 +3,9 @@ name: Release to PyPI
 # Tag-driven release using PyPI Trusted Publishing (OIDC, no manual token).
 # Before this works, you must register the pending publisher at:
 #   https://pypi.org/manage/account/publishing/
-#   PyPI Project Name:   sextant
+#   PyPI Project Name:   lemmas
 #   Owner:               NORTHTEKDevs
-#   Repository name:     sextant
+#   Repository name:     lemmas
 #   Workflow filename:   release.yml
 #   Environment name:    pypi
 #
@@ -46,7 +46,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: pypi
-      url: https://pypi.org/p/sextant
+      url: https://pypi.org/p/lemmas
     permissions:
       id-token: write   # required for trusted publishing
     steps:

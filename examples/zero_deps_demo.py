@@ -1,5 +1,5 @@
-"""Sextant works without any provider SDK. This example uses only the
-echo stubs from sextant.adapters so it runs offline.
+"""Lemmas works without any provider SDK. This example uses only the
+echo stubs from lemmas.adapters so it runs offline.
 
   python examples/zero_deps_demo.py
 """
@@ -8,8 +8,8 @@ from __future__ import annotations
 
 import time
 
-from sextant import cove, race, self_consistency
-from sextant.adapters import echo_complete, varying_echo_complete
+from lemmas import cove, race, self_consistency
+from lemmas.adapters import echo_complete, varying_echo_complete
 
 
 def demo_cove() -> None:

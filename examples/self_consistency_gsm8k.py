@@ -1,6 +1,6 @@
 """Self-consistency on a GSM8K-style math word problem.
 
-  pip install sextant[openai]
+  pip install lemmas[openai]
   OPENAI_API_KEY=sk-... python examples/self_consistency_gsm8k.py
 """
 
@@ -24,8 +24,8 @@ def main() -> None:
         sys.exit(2)
     from openai import OpenAI
 
-    from sextant import self_consistency
-    from sextant.adapters import openai_complete
+    from lemmas import self_consistency
+    from lemmas.adapters import openai_complete
 
     # Temperature > 0 is what makes self-consistency work.
     complete = openai_complete(OpenAI(), model="gpt-4o-mini",

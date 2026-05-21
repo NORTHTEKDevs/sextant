@@ -1,8 +1,8 @@
-"""Tests for sextant.reflexion.json_schema_critic."""
+"""Tests for lemmas.reflexion.json_schema_critic."""
 
 from __future__ import annotations
 
-from sextant.reflexion import json_schema_critic
+from lemmas.reflexion import json_schema_critic
 
 
 def test_passes_on_valid_json():

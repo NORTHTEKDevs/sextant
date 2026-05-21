@@ -1,6 +1,6 @@
-"""Optional adapters that turn provider SDK clients into Sextant callables.
+"""Optional adapters that turn provider SDK clients into Lemmas callables.
 
-Sextant's core deliberately doesn't import any provider SDK. If you've
+Lemmas's core deliberately doesn't import any provider SDK. If you've
 already wrapped your LLM in a `(messages) -> str` callable, you don't need
 this module at all.
 
@@ -13,7 +13,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from sextant.types import CompleteFn, EmbedFn, Message
+from lemmas.types import CompleteFn, EmbedFn, Message
 
 
 def openai_complete(
@@ -23,7 +23,7 @@ def openai_complete(
     max_tokens: int = 1024,
     **extra: Any,
 ) -> CompleteFn:
-    """Adapt an openai.OpenAI() client into a Sextant CompleteFn.
+    """Adapt an openai.OpenAI() client into a Lemmas CompleteFn.
 
     `extra` is passed straight through to chat.completions.create -- you
     can use it for top_p, seed, tool_choice, etc.
@@ -44,7 +44,7 @@ def openai_embed(
     client: Any,
     model: str = "text-embedding-3-small",
 ) -> EmbedFn:
-    """Adapt an openai.OpenAI() client into a Sextant EmbedFn."""
+    """Adapt an openai.OpenAI() client into a Lemmas EmbedFn."""
     import numpy as np
 
     def _fn(texts: list[str]) -> Any:
@@ -59,7 +59,7 @@ def anthropic_complete(
     temperature: float = 0.7,
     max_tokens: int = 1024,
 ) -> CompleteFn:
-    """Adapt an anthropic.Anthropic() client into a Sextant CompleteFn.
+    """Adapt an anthropic.Anthropic() client into a Lemmas CompleteFn.
 
     Hides Anthropic's separate `system` field: a message with role='system'
     in your input list is lifted out and passed as the top-level `system`.
@@ -216,7 +216,7 @@ def openai_compatible_complete(
     as the server speaks OpenAI's POST /v1/chat/completions JSON shape.
 
     Uses urllib (zero deps) instead of an SDK so this works in every
-    environment Sextant runs in.
+    environment Lemmas runs in.
     """
     import json
     import urllib.request

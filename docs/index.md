@@ -1,15 +1,15 @@
-# sextant
+# lemmas
 
 **Reliability primitives for any LLM API.** No framework, no SDK lock-in --
 just small modules that wrap whatever provider you use.
 
 ```bash
-pip install sextant
+pip install lemmas
 ```
 
 ```python
-from sextant import cove
-from sextant.adapters import openai_complete
+from lemmas import cove
+from lemmas.adapters import openai_complete
 from openai import OpenAI
 
 complete = openai_complete(OpenAI(), model="gpt-4o-mini")
@@ -32,20 +32,20 @@ print(r.final)
 Every primitive has an [async sibling](async.md) and accepts an optional
 [tracer](tracing.md) for observability.
 
-## Why sextant exists
+## Why lemmas exists
 
 Modern LLM platforms (LangChain, LlamaIndex, LiteLLM) give you routing and
 abstractions. They don't give you the inference-time reliability methods
 from the research literature -- you end up reimplementing CoVe and
-self-consistency by hand in every project. Sextant is the lowest-friction
+self-consistency by hand in every project. Lemmas is the lowest-friction
 implementation of those methods, designed to drop into any stack.
 
-## What sextant does NOT do
+## What lemmas does NOT do
 
 - No router (use LiteLLM, Portkey, or your own).
-- No observability backend (use Langfuse, Phoenix, Datadog -- sextant just
+- No observability backend (use Langfuse, Phoenix, Datadog -- lemmas just
   emits events via a tracer protocol).
 - No retrieval / RAG (use LlamaIndex, LangChain, a real vector DB).
 - No agent loop framework.
 
-These are deliberate. Sextant is a small library, not a framework.
+These are deliberate. Lemmas is a small library, not a framework.

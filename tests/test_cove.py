@@ -1,9 +1,9 @@
-"""Tests for sextant.cove."""
+"""Tests for lemmas.cove."""
 
 from __future__ import annotations
 
-from sextant.adapters import echo_complete
-from sextant.cove import _split_questions, cove
+from lemmas.adapters import echo_complete
+from lemmas.cove import _split_questions, cove
 
 
 def test_cove_runs_full_pipeline_with_stub():

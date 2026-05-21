@@ -1,10 +1,10 @@
-"""Tests for sextant.tracing."""
+"""Tests for lemmas.tracing."""
 
 from __future__ import annotations
 
 import time
 
-from sextant.tracing import (
+from lemmas.tracing import (
     CallbackTracer,
     LoggingTracer,
     NoOpTracer,

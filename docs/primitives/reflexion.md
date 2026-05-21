@@ -8,7 +8,7 @@ a max-iterations cap is hit. The critique becomes part of the next prompt
 so the model learns from its mistakes within the same conversation.
 
 ```python
-from sextant import reflexion, programmatic_critic
+from lemmas import reflexion, programmatic_critic
 
 def run_tests(candidate: str) -> tuple[bool, str]:
     # Save the candidate code, run pytest, return (passed, feedback).
@@ -43,7 +43,7 @@ Up to `max_iterations` attempts + critic calls. Stops early on first pass.
 ## Schema-validated structured output
 
 ```python
-from sextant import reflexion, json_schema_critic
+from lemmas import reflexion, json_schema_critic
 
 schema = {
     "type": "object",

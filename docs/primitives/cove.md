@@ -14,7 +14,7 @@ Four-step pipeline that reduces hallucination on long-form factual answers:
    or removing anything contradicted by the verifications.
 
 ```python
-from sextant import cove
+from lemmas import cove
 
 r = cove(complete, query="Who won Best Picture at the 1995 Academy Awards?",
           n_questions=4)

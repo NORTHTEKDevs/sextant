@@ -1,16 +1,16 @@
 # Async API
 
-Every primitive has an async sibling under `sextant.asyncio`. The
+Every primitive has an async sibling under `lemmas.asyncio`. The
 N-sample primitives (`aself_consistency`, `abest_of_n`) parallelize their
 LLM calls via `asyncio.gather`, turning N x latency into ~1 x latency.
 
 ```python
-from sextant.asyncio import acove, aself_consistency, abest_of_n, areflexion, arace
+from lemmas.asyncio import acove, aself_consistency, abest_of_n, areflexion, arace
 ```
 
 ## Async adapters
 
-Sextant doesn't (yet) ship async adapters for every provider. Roll your own:
+Lemmas doesn't (yet) ship async adapters for every provider. Roll your own:
 
 ```python
 from openai import AsyncOpenAI
@@ -48,7 +48,7 @@ r = await abest_of_n(async_complete, messages=[...], scorer=my_scorer, n=5)
 ## `arace`
 
 ```python
-from sextant.asyncio import arace
+from lemmas.asyncio import arace
 
 r = await arace([
     ("primary",   lambda: primary_provider(messages)),

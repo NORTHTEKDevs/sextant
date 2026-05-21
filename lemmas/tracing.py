@@ -1,4 +1,4 @@
-"""Provider-agnostic tracing for sextant primitives.
+"""Provider-agnostic tracing for lemmas primitives.
 
 Every primitive accepts an optional `tracer=` keyword that defaults to a
 no-op. When provided, the primitive emits structured events you can pipe
@@ -7,7 +7,7 @@ into Langfuse, Phoenix, OpenTelemetry, Honeycomb, stdout -- anywhere.
 Design notes
 ------------
 
-- Sextant doesn't depend on any tracing library. The `Tracer` protocol is
+- Lemmas doesn't depend on any tracing library. The `Tracer` protocol is
   six methods: start_span, end_span, emit_event, plus three context-manager
   conveniences. You implement them however your stack wants.
 - Spans are nested by call site, not by thread-local context. If you need
@@ -65,7 +65,7 @@ class Tracer(Protocol):
 
 
 class NoOpTracer:
-    """Default. Does nothing. Sextant primitives call into this in the hot path."""
+    """Default. Does nothing. Lemmas primitives call into this in the hot path."""
 
     def start_span(self, name: str, **attrs: Any) -> SpanInfo:
         return SpanInfo(name=name, started_at=time.monotonic(), attrs={})

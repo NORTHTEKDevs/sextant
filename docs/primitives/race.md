@@ -6,7 +6,7 @@ Run N callables in parallel; return whichever succeeds first; cancel the
 losers. Generic -- not LLM-specific.
 
 ```python
-from sextant import race
+from lemmas import race
 
 result = race([
     ("openai",    lambda: openai_complete(msgs)),
@@ -49,7 +49,7 @@ Set `fail_fast=True` if you want the first exception to propagate.
 ## Async parity
 
 ```python
-from sextant.asyncio import arace
+from lemmas.asyncio import arace
 
 r = await arace([
     ("a", async_call_a),

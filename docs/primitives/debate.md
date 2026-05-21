@@ -14,8 +14,8 @@ Cheap: three runs of the same model with different personas, temperature
 noise drives the disagreement.
 
 ```python
-from sextant import debate
-from sextant.adapters import openai_complete
+from lemmas import debate
+from lemmas.adapters import openai_complete
 from openai import OpenAI
 
 complete = openai_complete(OpenAI(), model="gpt-4o-mini", temperature=0.7)
@@ -36,7 +36,7 @@ Different model families have different blind spots. Race them against
 each other:
 
 ```python
-from sextant.adapters import openai_complete, anthropic_complete
+from lemmas.adapters import openai_complete, anthropic_complete
 
 openai_agent    = openai_complete(OpenAI(), model="gpt-4o-mini")
 claude_agent    = anthropic_complete(Anthropic(), model="claude-haiku-4-5")

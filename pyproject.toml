@@ -3,7 +3,7 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "sextant"
+name = "lemmas"
 version = "0.4.0"
 description = "Four reliability primitives for any LLM API: Chain-of-Verification, self-consistency, prompt-drift detection, hedged execution."
 readme = "README.md"
@@ -45,16 +45,16 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/NORTHTEKDevs/sextant"
-Source = "https://github.com/NORTHTEKDevs/sextant"
-Issues = "https://github.com/NORTHTEKDevs/sextant/issues"
+Homepage = "https://github.com/NORTHTEKDevs/lemmas"
+Source = "https://github.com/NORTHTEKDevs/lemmas"
+Issues = "https://github.com/NORTHTEKDevs/lemmas/issues"
 
 [tool.setuptools.packages.find]
-include = ["sextant*"]
+include = ["lemmas*"]
 exclude = ["tests*", "examples*"]
 
 [tool.setuptools.package-data]
-sextant = ["py.typed"]
+lemmas = ["py.typed"]
 
 [tool.ruff]
 line-length = 100

@@ -1,4 +1,4 @@
-"""Smoke tests for the CLI (sextant/__main__.py)."""
+"""Smoke tests for the CLI (lemmas/__main__.py)."""
 
 from __future__ import annotations
 
@@ -11,7 +11,7 @@ import pytest
 
 def _run(*args: str, env: dict | None = None) -> subprocess.CompletedProcess:
     return subprocess.run(
-        [sys.executable, "-m", "sextant", *args],
+        [sys.executable, "-m", "lemmas", *args],
         capture_output=True, text=True, env=env, check=False,
     )
 

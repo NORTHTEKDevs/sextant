@@ -8,7 +8,7 @@ independent answers, then each one revises after seeing the others' drafts
 (with the implicit "we disagree, let's reconcile" pressure). After R rounds,
 a judge picks the best final answer -- or one is chosen by plurality.
 
-Sextant supports two debate shapes:
+Lemmas supports two debate shapes:
 
   1. Same-model debate (one CompleteFn, different system prompts).
      Cheap and surprisingly effective; the disagreement comes from
@@ -30,8 +30,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from sextant.tracing import Tracer, span
-from sextant.types import CompleteFn, Message
+from lemmas.tracing import Tracer, span
+from lemmas.types import CompleteFn, Message
 
 
 @dataclass
@@ -120,12 +120,12 @@ def debate(
     if len(personas) != len(agents):
         raise ValueError("personas length must match number of agents")
 
-    with span(tracer, "sextant.debate",
+    with span(tracer, "lemmas.debate",
                query=query, n_agents=len(agents), rounds=rounds):
         # Round 0: initial independent drafts.
         drafts: dict[str, str] = {}
         for (label, complete), persona in zip(agents, personas, strict=True):
-            with span(tracer, "sextant.debate.draft",
+            with span(tracer, "lemmas.debate.draft",
                        agent=label, round=0) as out:
                 prompt = _FIRST_ROUND_TEMPLATE.format(
                     system_persona=persona, query=query)
@@ -139,7 +139,7 @@ def debate(
         for r in range(1, rounds + 1):
             new_drafts: dict[str, str] = {}
             for (label, complete), persona in zip(agents, personas, strict=True):
-                with span(tracer, "sextant.debate.revise",
+                with span(tracer, "lemmas.debate.revise",
                            agent=label, round=r) as out:
                     other_drafts = "\n\n".join(
                         f"[{ol}]\n{ot}"
@@ -160,7 +160,7 @@ def debate(
 
         # Judgment.
         if judge is not None:
-            with span(tracer, "sextant.debate.judge") as out:
+            with span(tracer, "lemmas.debate.judge") as out:
                 final_block = "\n\n".join(
                     f"[{label}]\n{text}" for label, text in drafts.items())
                 judge_prompt = _JUDGE_TEMPLATE.format(

@@ -7,7 +7,7 @@ Beats greedy decoding on reasoning benchmarks by 10-20 points (GSM8K,
 SVAMP, AQuA, ARC, StrategyQA).
 
 ```python
-from sextant import self_consistency
+from lemmas import self_consistency
 
 r = self_consistency(
     complete,  # temperature > 0 baked into your CompleteFn
@@ -27,7 +27,7 @@ print(r.answer, r.confidence, r.vote_counts)
 | `regex` | Custom regex; group 1 is the answer. |
 | `similarity` | Open-ended generation. Embeds all samples, returns the one nearest the semantic centroid. Requires `embed_fn=`. |
 
-The `similarity` extractor is sextant-specific. It lets you do
+The `similarity` extractor is lemmas-specific. It lets you do
 self-consistency on tasks where there's no discrete answer to vote on
 (summaries, code, creative writing).
 
@@ -39,7 +39,7 @@ N=5 is enough for most tasks.
 ## Async parity
 
 ```python
-from sextant.asyncio import aself_consistency
+from lemmas.asyncio import aself_consistency
 
 # N samples run concurrently via asyncio.gather -- ~1x latency instead of Nx.
 r = await aself_consistency(async_complete, messages=[...], n=10)

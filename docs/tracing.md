@@ -1,7 +1,7 @@
 # Tracing
 
 Every primitive accepts an optional `tracer=` kwarg. By default it's a
-no-op; pass any object implementing the `Tracer` protocol and sextant
+no-op; pass any object implementing the `Tracer` protocol and lemmas
 will emit structured spans + events you can pipe to your observability
 backend.
 
@@ -14,7 +14,7 @@ class Tracer(Protocol):
     def emit_event(self, name: str, **attrs) -> None: ...
 ```
 
-Three implementations ship with sextant:
+Three implementations ship with lemmas:
 
 | Class | Use case |
 |---|---|
@@ -26,7 +26,7 @@ Three implementations ship with sextant:
 
 ```python
 from langfuse import Langfuse
-from sextant import CallbackTracer, cove
+from lemmas import CallbackTracer, cove
 
 lf = Langfuse(...)
 
@@ -45,9 +45,9 @@ cove(complete, query="...", tracer=tracer)
 
 ```python
 from opentelemetry import trace
-from sextant import CallbackTracer
+from lemmas import CallbackTracer
 
-otel_tracer = trace.get_tracer("sextant")
+otel_tracer = trace.get_tracer("lemmas")
 
 def on_span_end(name, attrs):
     with otel_tracer.start_as_current_span(name) as s:
@@ -62,7 +62,7 @@ cove(complete, query="...", tracer=CallbackTracer(on_span_end=on_span_end))
 To avoid threading `tracer=` through every call, set a global default:
 
 ```python
-from sextant import LoggingTracer, set_default_tracer
+from lemmas import LoggingTracer, set_default_tracer
 
 set_default_tracer(LoggingTracer(sink=print))
 
@@ -73,9 +73,9 @@ set_default_tracer(LoggingTracer(sink=print))
 
 | Primitive | Spans |
 |---|---|
-| `cove` | `sextant.cove`, `sextant.cove.baseline`, `sextant.cove.plan`, `sextant.cove.answer` (one per question), `sextant.cove.final` |
-| `debate` | `sextant.debate`, `sextant.debate.draft` (per agent), `sextant.debate.revise` (per agent per round), `sextant.debate.judge` |
-| `reflexion` | `sextant.reflexion`, `sextant.reflexion.attempt` (per iteration), `sextant.reflexion.critic` (per iteration) |
+| `cove` | `lemmas.cove`, `lemmas.cove.baseline`, `lemmas.cove.plan`, `lemmas.cove.answer` (one per question), `lemmas.cove.final` |
+| `debate` | `lemmas.debate`, `lemmas.debate.draft` (per agent), `lemmas.debate.revise` (per agent per round), `lemmas.debate.judge` |
+| `reflexion` | `lemmas.reflexion`, `lemmas.reflexion.attempt` (per iteration), `lemmas.reflexion.critic` (per iteration) |
 
 Other primitives emit fewer spans (or none); the cost is in the wrapped
 LLM calls, which your provider client surfaces in its own telemetry.

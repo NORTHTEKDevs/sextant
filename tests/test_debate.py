@@ -1,10 +1,10 @@
-"""Tests for sextant.debate."""
+"""Tests for lemmas.debate."""
 
 from __future__ import annotations
 
 import pytest
 
-from sextant.debate import (
+from lemmas.debate import (
     _convergence_winner,
     _default_personas,
     _parse_judge_verdict,
@@ -117,7 +117,7 @@ def test_parse_judge_verdict_matches_prefix():
 
 def test_debate_with_tracer_records_spans():
     """Plugging a LoggingTracer in should record one span per draft + the outer."""
-    from sextant import LoggingTracer
+    from lemmas import LoggingTracer
     tracer = LoggingTracer()
     def complete(_msgs):
         return "x"
@@ -128,6 +128,6 @@ def test_debate_with_tracer_records_spans():
     )
     span_names = [s["name"] for s in tracer.spans]
     # outer + 2 drafts + 2 revisions = 5 spans
-    assert "sextant.debate" in span_names
-    assert span_names.count("sextant.debate.draft") == 2
-    assert span_names.count("sextant.debate.revise") == 2
+    assert "lemmas.debate" in span_names
+    assert span_names.count("lemmas.debate.draft") == 2
+    assert span_names.count("lemmas.debate.revise") == 2

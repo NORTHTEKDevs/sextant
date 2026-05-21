@@ -1,7 +1,7 @@
 # CLI
 
 ```bash
-python -m sextant <subcommand> "<query>" [flags]
+python -m lemmas <subcommand> "<query>" [flags]
 ```
 
 Works offline against the deterministic echo stub OR with `OPENAI_API_KEY`
@@ -10,10 +10,10 @@ against `gpt-4o-mini`. All subcommands accept `--json` for piping.
 ## Subcommands
 
 ```bash
-python -m sextant cove "Who invented the laser?" --n-questions 4
-python -m sextant self_consistency "What is 13 * 17?" --n 5 --extractor last_number
-python -m sextant best_of_n "Write a haiku" --n 5 --keywords "snow,arctic"
-python -m sextant drift "hello world"          # requires OPENAI_API_KEY
+python -m lemmas cove "Who invented the laser?" --n-questions 4
+python -m lemmas self_consistency "What is 13 * 17?" --n 5 --extractor last_number
+python -m lemmas best_of_n "Write a haiku" --n 5 --keywords "snow,arctic"
+python -m lemmas drift "hello world"          # requires OPENAI_API_KEY
 ```
 
 ## Common flags

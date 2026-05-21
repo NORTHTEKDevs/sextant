@@ -1,6 +1,6 @@
 """Race Anthropic Haiku vs OpenAI gpt-4o-mini, return whichever is first.
 
-  pip install sextant[openai,anthropic]
+  pip install lemmas[openai,anthropic]
   OPENAI_API_KEY=sk-... ANTHROPIC_API_KEY=sk-ant-... \
     python examples/hedged_anthropic_vs_openai.py
 """
@@ -19,8 +19,8 @@ def main() -> None:
     from anthropic import Anthropic
     from openai import OpenAI
 
-    from sextant import race
-    from sextant.adapters import anthropic_complete, openai_complete
+    from lemmas import race
+    from lemmas.adapters import anthropic_complete, openai_complete
 
     o_complete = openai_complete(OpenAI(), model="gpt-4o-mini",
                                    temperature=0.3, max_tokens=200)

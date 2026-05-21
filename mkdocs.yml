@@ -1,8 +1,8 @@
-site_name: sextant
+site_name: lemmas
 site_description: Reliability primitives for any LLM API
-site_url: https://NORTHTEKDevs.github.io/sextant/
-repo_url: https://github.com/NORTHTEKDevs/sextant
-repo_name: NORTHTEKDevs/sextant
+site_url: https://NORTHTEKDevs.github.io/lemmas/
+repo_url: https://github.com/NORTHTEKDevs/lemmas
+repo_name: NORTHTEKDevs/lemmas
 edit_uri: edit/main/docs/
 
 theme:

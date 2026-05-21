@@ -38,7 +38,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass, field
 
-from sextant.types import CompleteFn, Message
+from lemmas.types import CompleteFn, Message
 
 CriticVerdict = tuple[bool, str]
 """(passed, feedback). feedback is shown to the model on retry."""

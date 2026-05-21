@@ -1,4 +1,4 @@
-"""Tests for sextant.hedged."""
+"""Tests for lemmas.hedged."""
 
 from __future__ import annotations
 
@@ -6,7 +6,7 @@ import time
 
 import pytest
 
-from sextant.hedged import race
+from lemmas.hedged import race
 
 
 def test_fast_wins_against_slow():

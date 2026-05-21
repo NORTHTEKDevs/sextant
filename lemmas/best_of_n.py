@@ -36,7 +36,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass, field
 
-from sextant.types import CompleteFn, Message
+from lemmas.types import CompleteFn, Message
 
 ScoreFn = Callable[[str], float]
 """Map a candidate string to a scalar score. Higher = better."""

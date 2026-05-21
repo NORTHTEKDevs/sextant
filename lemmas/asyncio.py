@@ -21,8 +21,8 @@ import time
 from collections import Counter
 from collections.abc import Awaitable, Callable
 
-from sextant.best_of_n import BestOfNResult
-from sextant.cove import (
+from lemmas.best_of_n import BestOfNResult
+from lemmas.cove import (
     _ANSWER_TEMPLATE,
     _BASELINE_TEMPLATE,
     _FINAL_TEMPLATE,
@@ -31,19 +31,19 @@ from sextant.cove import (
     CoVeStep,
     _split_questions,
 )
-from sextant.hedged import HedgeResult
-from sextant.reflexion import (
+from lemmas.hedged import HedgeResult
+from lemmas.reflexion import (
     _INITIAL_TEMPLATE,
     _RETRY_TEMPLATE,
     ReflexionResult,
     ReflexionStep,
 )
-from sextant.self_consistency import (
+from lemmas.self_consistency import (
     SelfConsistencyResult,
     _extract,
     _semantic_vote,
 )
-from sextant.types import AsyncCompleteFn, AsyncEmbedFn, EmbedFn, Message
+from lemmas.types import AsyncCompleteFn, AsyncEmbedFn, EmbedFn, Message
 
 # ---- Async CoVe ----------------------------------------------------------
 

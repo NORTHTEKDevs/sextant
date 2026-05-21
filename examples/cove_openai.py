@@ -1,6 +1,6 @@
 """Chain-of-Verification with OpenAI.
 
-  pip install sextant[openai]
+  pip install lemmas[openai]
   OPENAI_API_KEY=sk-... python examples/cove_openai.py
 """
 
@@ -16,8 +16,8 @@ def main() -> None:
         sys.exit(2)
     from openai import OpenAI
 
-    from sextant import cove
-    from sextant.adapters import openai_complete
+    from lemmas import cove
+    from lemmas.adapters import openai_complete
 
     query = " ".join(sys.argv[1:]) or "List five Nobel laureates in physics from the 1970s."
     complete = openai_complete(OpenAI(), model="gpt-4o-mini",

@@ -1,6 +1,6 @@
 """Watch a stream of prompts for drift, using OpenAI embeddings.
 
-  pip install sextant[openai]
+  pip install lemmas[openai]
   OPENAI_API_KEY=sk-... python examples/drift_monitor.py
 """
 
@@ -43,8 +43,8 @@ def main() -> None:
         sys.exit(2)
     from openai import OpenAI
 
-    from sextant import DriftDetector
-    from sextant.adapters import openai_embed
+    from lemmas import DriftDetector
+    from lemmas.adapters import openai_embed
 
     embed = openai_embed(OpenAI(), model="text-embedding-3-small")
     detector = DriftDetector(embed_fn=embed, z_threshold=2.0, warmup_n=10)

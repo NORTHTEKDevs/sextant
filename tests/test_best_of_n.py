@@ -1,11 +1,11 @@
-"""Tests for sextant.best_of_n."""
+"""Tests for lemmas.best_of_n."""
 
 from __future__ import annotations
 
 import pytest
 
-from sextant.adapters import varying_echo_complete
-from sextant.best_of_n import (
+from lemmas.adapters import varying_echo_complete
+from lemmas.best_of_n import (
     best_of_n,
     keyword_scorer,
     length_scorer,

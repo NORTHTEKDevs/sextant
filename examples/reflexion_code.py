@@ -1,7 +1,7 @@
 """Reflexion on a code-generation task: write a function, run unit tests,
 retry with the test failure as feedback.
 
-  pip install sextant[openai]
+  pip install lemmas[openai]
   OPENAI_API_KEY=sk-... python examples/reflexion_code.py
 """
 
@@ -21,8 +21,8 @@ def main() -> None:
         sys.exit(2)
     from openai import OpenAI
 
-    from sextant import programmatic_critic, reflexion
-    from sextant.adapters import openai_complete
+    from lemmas import programmatic_critic, reflexion
+    from lemmas.adapters import openai_complete
 
     complete = openai_complete(OpenAI(), model="gpt-4o-mini",
                                  temperature=0.3, max_tokens=400)

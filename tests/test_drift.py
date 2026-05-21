@@ -1,10 +1,10 @@
-"""Tests for sextant.drift."""
+"""Tests for lemmas.drift."""
 
 from __future__ import annotations
 
 import numpy as np
 
-from sextant.drift import DriftDetector
+from lemmas.drift import DriftDetector
 
 
 def _fake_embed_topic(topic_map: dict[str, list[float]]):

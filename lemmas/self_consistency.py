@@ -7,7 +7,7 @@ completions at temperature > 0 and pick the answer that the plurality of
 samples agree on. Empirically beats greedy on GSM8K, SVAMP, AQuA, ARC,
 StrategyQA -- often by 10-20 points of accuracy.
 
-Sextant supports four answer extractors:
+Lemmas supports four answer extractors:
 
   last_line     Take the last non-empty line. Good for "The answer is X."
   last_number   Last number in the response. Good for arithmetic.
@@ -27,7 +27,7 @@ import re
 from collections import Counter
 from dataclasses import dataclass, field
 
-from sextant.types import CompleteFn, EmbedFn, Message
+from lemmas.types import CompleteFn, EmbedFn, Message
 
 
 @dataclass
@@ -55,7 +55,7 @@ def self_consistency(
     """Sample N completions and return the plurality answer.
 
     Note: `complete` must produce different outputs across calls (i.e. you
-    set temperature > 0 in your provider call). Sextant doesn't inject
+    set temperature > 0 in your provider call). Lemmas doesn't inject
     temperature -- it's wrapped into your CompleteFn.
 
     Args:

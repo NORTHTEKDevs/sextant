@@ -1,4 +1,4 @@
-"""Sextant -- reliability primitives for any LLM API.
+"""Lemmas -- reliability primitives for any LLM API.
 
   cove(...)               Chain-of-Verification (Meta, Dhuliawala 2023)
   self_consistency(...)   Plurality voting over N samples (Wang 2022)
@@ -14,8 +14,8 @@ or any OpenAI-compatible URL.
 
 Quick start:
 
-  from sextant import cove
-  from sextant.adapters import openai_complete
+  from lemmas import cove
+  from lemmas.adapters import openai_complete
   from openai import OpenAI
 
   complete = openai_complete(OpenAI(), model="gpt-4o-mini")
@@ -23,7 +23,7 @@ Quick start:
   print(result.final)
 """
 
-from sextant.best_of_n import (
+from lemmas.best_of_n import (
     BestOfNResult,
     ScoreFn,
     best_of_n,
@@ -31,11 +31,11 @@ from sextant.best_of_n import (
     length_scorer,
     llm_judge_scorer,
 )
-from sextant.cove import CoVeResult, CoVeStep, cove
-from sextant.debate import DebateResult, DebateRound, debate
-from sextant.drift import DriftDetector, DriftSample
-from sextant.hedged import HedgeResult, race
-from sextant.reflexion import (
+from lemmas.cove import CoVeResult, CoVeStep, cove
+from lemmas.debate import DebateResult, DebateRound, debate
+from lemmas.drift import DriftDetector, DriftSample
+from lemmas.hedged import HedgeResult, race
+from lemmas.reflexion import (
     CriticFn,
     CriticVerdict,
     ReflexionResult,
@@ -46,15 +46,15 @@ from sextant.reflexion import (
     reflexion,
     test_critic,
 )
-from sextant.self_consistency import SelfConsistencyResult, self_consistency
-from sextant.tracing import (
+from lemmas.self_consistency import SelfConsistencyResult, self_consistency
+from lemmas.tracing import (
     CallbackTracer,
     LoggingTracer,
     NoOpTracer,
     Tracer,
     set_default_tracer,
 )
-from sextant.types import (
+from lemmas.types import (
     AsyncCompleteFn,
     AsyncEmbedFn,
     CompleteFn,

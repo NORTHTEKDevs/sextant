@@ -24,7 +24,7 @@ versioning follows [SemVer](https://semver.org/spec/v2.0.0.html).
 - **`json_schema_critic(schema)`** -- Reflexion critic that validates
   output is JSON matching a schema. Uses `jsonschema` if installed,
   minimal type + required-keys fallback otherwise. Strips Markdown fences.
-- **Documentation site** at https://NORTHTEKDevs.github.io/sextant/
+- **Documentation site** at https://NORTHTEKDevs.github.io/lemmas/
   (mkdocs-material, GitHub Pages, auto-published on docs/ changes).
 
 ### Stats
@@ -42,7 +42,7 @@ versioning follows [SemVer](https://semver.org/spec/v2.0.0.html).
   (LLM-as-judge, passes on "PASS" substring) and `programmatic_critic` (wrap
   your own test function). Strictly stronger than best-of-N when you have a
   verifiable signal -- critic feedback flows into the next attempt.
-- **`areflexion`** async variant in `sextant.asyncio`.
+- **`areflexion`** async variant in `lemmas.asyncio`.
 - **Gemini adapter** (`gemini_complete`, `gemini_embed`) for
   `google.generativeai`. Accepts either a module or a `GenerativeModel`.
 - **Groq adapter** (`groq_complete`) -- OpenAI-shaped, drop-in.
@@ -50,7 +50,7 @@ versioning follows [SemVer](https://semver.org/spec/v2.0.0.html).
   `openai_compatible_embed`) -- zero SDK deps, works with vLLM, llama.cpp,
   Together, Fireworks, DeepSeek, Anyscale, Perplexity, LM Studio,
   Ollama (`/v1`), etc.
-- New CLI subcommand: `python -m sextant cove`, `self_consistency`,
+- New CLI subcommand: `python -m lemmas cove`, `self_consistency`,
   `best_of_n`, `drift`.
 - README badges (CI, license, Python version) and a clear "Releasing to
   PyPI" section documenting the trusted-publisher setup.
@@ -73,11 +73,11 @@ versioning follows [SemVer](https://semver.org/spec/v2.0.0.html).
   score each via a scorer fn, return the highest-scoring sample. Includes
   three scorer factories: `llm_judge_scorer`, `length_scorer`,
   `keyword_scorer`.
-- **Async parity** for every primitive (`sextant.asyncio` module):
+- **Async parity** for every primitive (`lemmas.asyncio` module):
   `acove`, `aself_consistency`, `abest_of_n`, `arace`. The N-sample
   primitives now parallelize via `asyncio.gather`, cutting wall-clock time
   for self-consistency / best-of-N from O(N) to O(1) per concurrent batch.
-- **PEP 561 marker** (`sextant/py.typed`) so mypy users get type checking
+- **PEP 561 marker** (`lemmas/py.typed`) so mypy users get type checking
   out of the box.
 - New scorer interface (`ScoreFn = Callable[[str], float]`) plus an async
   variant.

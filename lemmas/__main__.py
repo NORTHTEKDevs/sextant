@@ -1,4 +1,4 @@
-"""Tiny CLI: `python -m sextant <subcommand> <query>`.
+"""Tiny CLI: `python -m lemmas <subcommand> <query>`.
 
 Subcommands:
   cove "question"                Run Chain-of-Verification.
@@ -28,15 +28,15 @@ def _build_complete(model: str, temperature: float, max_tokens: int) -> Any:
         try:
             from openai import OpenAI
 
-            from sextant.adapters import openai_complete
+            from lemmas.adapters import openai_complete
             return (openai_complete(
                 OpenAI(), model=model, temperature=temperature,
                 max_tokens=max_tokens), f"openai/{model}")
         except ImportError:
             print("OPENAI_API_KEY set but openai package not installed; "
-                  "run `pip install sextant[openai]`.", file=sys.stderr)
+                  "run `pip install lemmas[openai]`.", file=sys.stderr)
             sys.exit(2)
-    from sextant.adapters import varying_echo_complete
+    from lemmas.adapters import varying_echo_complete
     return (varying_echo_complete(
         ["Answer: 42", "Answer: 42", "Answer: 7",
          "Answer: 42", "Answer: 13"]), "stub")
@@ -47,7 +47,7 @@ def _build_embed() -> Any:
         try:
             from openai import OpenAI
 
-            from sextant.adapters import openai_embed
+            from lemmas.adapters import openai_embed
             return openai_embed(OpenAI(),
                                  model="text-embedding-3-small")
         except ImportError:
@@ -60,7 +60,7 @@ def _build_embed() -> Any:
 
 
 def cmd_cove(args: argparse.Namespace) -> int:
-    from sextant import cove
+    from lemmas import cove
     complete, backend = _build_complete(args.model, args.temperature,
                                           args.max_tokens)
     if not args.json:
@@ -84,7 +84,7 @@ def cmd_cove(args: argparse.Namespace) -> int:
 
 
 def cmd_self_consistency(args: argparse.Namespace) -> int:
-    from sextant import self_consistency
+    from lemmas import self_consistency
     complete, backend = _build_complete(args.model, args.temperature,
                                           args.max_tokens)
     if not args.json:
@@ -108,7 +108,7 @@ def cmd_self_consistency(args: argparse.Namespace) -> int:
 
 
 def cmd_best_of_n(args: argparse.Namespace) -> int:
-    from sextant import best_of_n, keyword_scorer, length_scorer
+    from lemmas import best_of_n, keyword_scorer, length_scorer
     complete, backend = _build_complete(args.model, args.temperature,
                                           args.max_tokens)
     if args.keywords:
@@ -138,7 +138,7 @@ def cmd_best_of_n(args: argparse.Namespace) -> int:
 
 
 def cmd_drift(args: argparse.Namespace) -> int:
-    from sextant import DriftDetector
+    from lemmas import DriftDetector
     embed = _build_embed()
     d = DriftDetector(embed_fn=embed,
                        z_threshold=args.z_threshold,
@@ -164,7 +164,7 @@ def main(argv: list[str] | None = None) -> int:
                          help="output as JSON instead of human-readable")
 
     p = argparse.ArgumentParser(
-        prog="sextant",
+        prog="lemmas",
         description="Reliability primitives for any LLM API.",
     )
     sub = p.add_subparsers(dest="cmd", required=True)

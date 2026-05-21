@@ -18,7 +18,7 @@ Cost is roughly N+2 model calls (N verification questions + baseline + final).
 On TriviaQA + WikiData + MultiSpanQA, the Meta paper reports 20-50% relative
 hallucination reduction vs. greedy decoding.
 
-Sextant's implementation is backend-agnostic. Plug in any callable that takes
+Lemmas's implementation is backend-agnostic. Plug in any callable that takes
 a list of messages and returns the assistant text.
 """
 
@@ -27,7 +27,7 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass, field
 
-from sextant.types import CompleteFn, Message
+from lemmas.types import CompleteFn, Message
 
 
 @dataclass

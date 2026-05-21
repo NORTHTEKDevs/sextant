@@ -5,8 +5,8 @@ Flags traffic-shape changes (abuse, eval-set staleness, prompt drift) via
 z-score, with an absolute-distance fallback for the degenerate case.
 
 ```python
-from sextant import DriftDetector
-from sextant.adapters import openai_embed
+from lemmas import DriftDetector
+from lemmas.adapters import openai_embed
 from openai import OpenAI
 
 embed = openai_embed(OpenAI(), model="text-embedding-3-small")

@@ -1,12 +1,12 @@
 """Shared type aliases.
 
-Sextant intentionally avoids depending on any provider SDK. Instead it
+Lemmas intentionally avoids depending on any provider SDK. Instead it
 defines two thin callable interfaces that users wrap their LLM client in:
 
   CompleteFn:  (messages: list[Message]) -> str
   EmbedFn:     (texts: list[str]) -> np.ndarray of shape (n, d)
 
-The `sextant.adapters` submodule provides ready-made factories for
+The `lemmas.adapters` submodule provides ready-made factories for
 OpenAI / Anthropic / Gemini that turn a client + model id into one of
 these callables.
 """

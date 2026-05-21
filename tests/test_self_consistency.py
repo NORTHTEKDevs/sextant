@@ -1,11 +1,11 @@
-"""Tests for sextant.self_consistency."""
+"""Tests for lemmas.self_consistency."""
 
 from __future__ import annotations
 
 import pytest
 
-from sextant.adapters import varying_echo_complete
-from sextant.self_consistency import self_consistency
+from lemmas.adapters import varying_echo_complete
+from lemmas.self_consistency import self_consistency
 
 
 def test_last_line_plurality_wins():

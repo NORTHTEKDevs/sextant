@@ -3,7 +3,7 @@ math word problems.
 
 Not a publishable benchmark -- just enough to feel the win on your own model.
 
-  pip install sextant[openai]
+  pip install lemmas[openai]
   OPENAI_API_KEY=sk-... python examples/benchmark_math.py
 """
 
@@ -82,8 +82,8 @@ def main() -> None:
         sys.exit(2)
     from openai import OpenAI
 
-    from sextant import self_consistency
-    from sextant.adapters import openai_complete
+    from lemmas import self_consistency
+    from lemmas.adapters import openai_complete
 
     client = OpenAI()
     greedy = openai_complete(client, model="gpt-4o-mini",

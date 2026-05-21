@@ -1,11 +1,11 @@
-"""Tests for sextant.reflexion."""
+"""Tests for lemmas.reflexion."""
 
 from __future__ import annotations
 
 import pytest
 
-from sextant.adapters import varying_echo_complete
-from sextant.reflexion import llm_critic, programmatic_critic, reflexion
+from lemmas.adapters import varying_echo_complete
+from lemmas.reflexion import llm_critic, programmatic_critic, reflexion
 
 
 def test_reflexion_stops_when_critic_passes():

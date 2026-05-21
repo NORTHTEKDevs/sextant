@@ -1,4 +1,4 @@
-"""Tests for the provider adapters in sextant.adapters.
+"""Tests for the provider adapters in lemmas.adapters.
 
 The tests don't call real APIs. They construct fake SDK clients that
 implement the same interface and verify the adapter wires the calls
@@ -14,7 +14,7 @@ from unittest.mock import MagicMock, patch
 # ---- openai_complete -----------------------------------------------------
 
 def test_openai_complete_wires_chat_completions():
-    from sextant.adapters import openai_complete
+    from lemmas.adapters import openai_complete
 
     client = MagicMock()
     client.chat.completions.create.return_value = SimpleNamespace(
@@ -36,7 +36,7 @@ def test_openai_complete_wires_chat_completions():
 def test_openai_embed_returns_numpy_array():
     import numpy as np
 
-    from sextant.adapters import openai_embed
+    from lemmas.adapters import openai_embed
     client = MagicMock()
     client.embeddings.create.return_value = SimpleNamespace(
         data=[SimpleNamespace(embedding=[1.0, 2.0, 3.0]),
@@ -51,7 +51,7 @@ def test_openai_embed_returns_numpy_array():
 # ---- anthropic_complete --------------------------------------------------
 
 def test_anthropic_complete_lifts_system_message():
-    from sextant.adapters import anthropic_complete
+    from lemmas.adapters import anthropic_complete
 
     client = MagicMock()
     client.messages.create.return_value = SimpleNamespace(
@@ -75,7 +75,7 @@ def test_anthropic_complete_lifts_system_message():
 # ---- gemini_complete -----------------------------------------------------
 
 def test_gemini_complete_flattens_history():
-    from sextant.adapters import gemini_complete
+    from lemmas.adapters import gemini_complete
 
     # SimpleNamespace lacks GenerativeModel attr, so adapter uses it as the model directly.
     fake_model = SimpleNamespace(
@@ -99,7 +99,7 @@ def test_gemini_complete_flattens_history():
 
 def test_gemini_complete_accepts_module_form():
     """If `client` is the genai module, the adapter constructs a model."""
-    from sextant.adapters import gemini_complete
+    from lemmas.adapters import gemini_complete
 
     fake_model = MagicMock()
     fake_model.generate_content.return_value = SimpleNamespace(text="x")
@@ -114,7 +114,7 @@ def test_gemini_complete_accepts_module_form():
 # ---- groq_complete -------------------------------------------------------
 
 def test_groq_complete_uses_openai_shape():
-    from sextant.adapters import groq_complete
+    from lemmas.adapters import groq_complete
 
     client = MagicMock()
     client.chat.completions.create.return_value = SimpleNamespace(
@@ -127,7 +127,7 @@ def test_groq_complete_uses_openai_shape():
 # ---- openai_compatible_complete ------------------------------------------
 
 def test_openai_compatible_complete_http_call():
-    from sextant.adapters import openai_compatible_complete
+    from lemmas.adapters import openai_compatible_complete
 
     response_body = json.dumps({
         "choices": [{"message": {"content": "compat response"}}]
@@ -152,7 +152,7 @@ def test_openai_compatible_complete_http_call():
 
 def test_openai_compatible_complete_handles_trailing_slash():
     """The adapter should normalize trailing slashes in base_url."""
-    from sextant.adapters import openai_compatible_complete
+    from lemmas.adapters import openai_compatible_complete
 
     response_body = json.dumps({
         "choices": [{"message": {"content": "y"}}]
@@ -181,7 +181,7 @@ def test_openai_compatible_complete_handles_trailing_slash():
 def test_openai_compatible_embed():
     import numpy as np
 
-    from sextant.adapters import openai_compatible_embed
+    from lemmas.adapters import openai_compatible_embed
     response_body = json.dumps({
         "data": [{"embedding": [0.1, 0.2]}, {"embedding": [0.3, 0.4]}],
     }).encode()
