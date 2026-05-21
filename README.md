@@ -4,9 +4,11 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue)](https://github.com/NORTHTEKDevs/sextant)
 
-**Six reliability primitives for any LLM API.** No new framework, no SDK
-lock-in -- just six small modules that wrap whatever provider you already
-use (OpenAI, Anthropic, Gemini, Groq, vLLM, llama.cpp, anything OpenAI-compat).
+**Seven reliability primitives for any LLM API.** No new framework, no SDK
+lock-in -- just small modules that wrap whatever provider you already use
+(OpenAI, Anthropic, Gemini, Groq, vLLM, llama.cpp, anything OpenAI-compat).
+
+Docs: **https://NORTHTEKDevs.github.io/sextant/**
 
 ```bash
 pip install sextant            # once published to PyPI
@@ -38,6 +40,7 @@ That's the whole API surface for one primitive. There are four of them.
 | `self_consistency` | [Wang et al. 2022](https://arxiv.org/abs/2203.11171) | Sample N completions at temperature > 0, return the plurality answer. Beats greedy decoding on reasoning benchmarks by 10-20 points. |
 | `best_of_n` | classic test-time compute pattern | Sample N, score each with a scorer fn (LLM-as-judge, length, keywords, or your own reward model), return the highest-scoring. The natural companion to self-consistency for open-ended tasks. |
 | `reflexion` | [Shinn et al. 2023](https://arxiv.org/abs/2303.11366) | Iterative try -> critique -> retry loop. Critic feedback is fed back into the next attempt, so the model learns from its mistakes within one conversation. Plug in an LLM critic or a programmatic test (unit tests, JSON schema, exact match). |
+| `debate` | [Du, Li, Mordatch 2023](https://arxiv.org/abs/2305.14325) | Multi-agent debate. N agents draft independent answers, then revise after seeing the others' drafts, for R rounds. A judge (or convergence) picks the winner. Same-model or cross-model. |
 | `DriftDetector` | rolling embedding centroid + Welford's variance | Per-bucket drift detection. Flags traffic-shape changes (abuse, eval-set staleness, prompt drift) via z-score with absolute-distance fallback. |
 | `race` | [Dean & Barroso "The Tail at Scale" 2013](https://research.google/pubs/the-tail-at-scale/) | Hedged execution. Race N callables in parallel, return whichever finishes first. Generic -- not LLM-specific. |
 

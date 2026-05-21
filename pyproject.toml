@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sextant"
-version = "0.3.0"
+version = "0.4.0"
 description = "Four reliability primitives for any LLM API: Chain-of-Verification, self-consistency, prompt-drift detection, hedged execution."
 readme = "README.md"
 license = {text = "MIT"}

@@ -1,13 +1,16 @@
-"""Sextant -- four reliability primitives for any LLM API.
+"""Sextant -- reliability primitives for any LLM API.
 
   cove(...)               Chain-of-Verification (Meta, Dhuliawala 2023)
   self_consistency(...)   Plurality voting over N samples (Wang 2022)
+  best_of_n(...)          Sample N + scorer (test-time compute)
+  reflexion(...)          Try -> critique -> retry (Shinn 2023)
+  debate(...)             Multi-agent debate (Du, Li, Mordatch 2023)
   DriftDetector(...)      Rolling-centroid prompt-drift detection
   race(...)               Hedged execution: race N callables, first wins
 
-All four are backend-agnostic: pass in a `complete_fn` (or in the drift case,
-an `embed_fn`) and they work with OpenAI, Anthropic, Gemini, Groq, Mistral,
-local llama.cpp, vLLM -- anything that can be wrapped in a callable.
+All backend-agnostic: pass in a `complete_fn` (or `embed_fn` for drift) and
+they work with OpenAI, Anthropic, Gemini, Groq, Mistral, vLLM, llama.cpp,
+or any OpenAI-compatible URL.
 
 Quick start:
 
@@ -29,6 +32,7 @@ from sextant.best_of_n import (
     llm_judge_scorer,
 )
 from sextant.cove import CoVeResult, CoVeStep, cove
+from sextant.debate import DebateResult, DebateRound, debate
 from sextant.drift import DriftDetector, DriftSample
 from sextant.hedged import HedgeResult, race
 from sextant.reflexion import (
@@ -36,12 +40,20 @@ from sextant.reflexion import (
     CriticVerdict,
     ReflexionResult,
     ReflexionStep,
+    json_schema_critic,
     llm_critic,
     programmatic_critic,
     reflexion,
     test_critic,
 )
 from sextant.self_consistency import SelfConsistencyResult, self_consistency
+from sextant.tracing import (
+    CallbackTracer,
+    LoggingTracer,
+    NoOpTracer,
+    Tracer,
+    set_default_tracer,
+)
 from sextant.types import (
     AsyncCompleteFn,
     AsyncEmbedFn,
@@ -50,7 +62,7 @@ from sextant.types import (
     Message,
 )
 
-__version__ = "0.3.0"
+__version__ = "0.4.0"
 
 __all__ = [
     "__version__",
@@ -82,11 +94,22 @@ __all__ = [
     "CriticVerdict",
     "llm_critic",
     "programmatic_critic",
+    "json_schema_critic",
     "test_critic",
+    # Debate
+    "debate",
+    "DebateResult",
+    "DebateRound",
     # Drift
     "DriftDetector",
     "DriftSample",
     # Hedged execution
     "race",
     "HedgeResult",
+    # Tracing
+    "Tracer",
+    "NoOpTracer",
+    "LoggingTracer",
+    "CallbackTracer",
+    "set_default_tracer",
 ]

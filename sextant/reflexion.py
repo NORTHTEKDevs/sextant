@@ -175,3 +175,75 @@ def programmatic_critic(
 # Backwards-compatible alias (pytest avoids collection because of `__test__`).
 test_critic = programmatic_critic
 test_critic.__test__ = False  # type: ignore[attr-defined]
+
+
+def json_schema_critic(schema: dict, allow_markdown_fence: bool = True) -> CriticFn:
+    """Critic that passes iff the candidate is valid JSON matching `schema`.
+
+    `schema` is a JSON Schema (draft 7+) dict. The critic strips ```json
+    code fences if present (very common in LLM output) before validating.
+
+    Validation uses `jsonschema` if installed; otherwise falls back to a
+    minimal type + required-keys check. `pip install jsonschema` for full
+    spec coverage.
+
+    Returns (True, "PASS") on valid; (False, error_message) otherwise.
+    """
+    def _critic(candidate: str) -> CriticVerdict:
+        import json
+        import re
+
+        text = candidate.strip()
+        if allow_markdown_fence:
+            m = re.search(r"```(?:json)?\s*(.+?)```", text, re.DOTALL)
+            if m:
+                text = m.group(1).strip()
+        try:
+            value = json.loads(text)
+        except json.JSONDecodeError as e:
+            return False, f"not valid JSON: {e.msg} at line {e.lineno}"
+        try:
+            import jsonschema
+            try:
+                jsonschema.validate(value, schema)
+                return True, "PASS"
+            except jsonschema.ValidationError as e:
+                return False, f"schema violation: {e.message} at {list(e.path)}"
+        except ImportError:
+            pass
+        ok, msg = _minimal_validate(value, schema)
+        return (ok, "PASS" if ok else msg)
+
+    return _critic
+
+
+def _minimal_validate(value, schema: dict) -> tuple[bool, str]:
+    """Tiny no-deps JSON-schema validator. Covers the 80% case."""
+    expected_type = schema.get("type")
+    type_map = {
+        "object": dict, "array": list, "string": str,
+        "number": (int, float), "integer": int,
+        "boolean": bool, "null": type(None),
+    }
+    if expected_type:
+        py_type = type_map.get(expected_type)
+        if py_type is not None and not isinstance(value, py_type):
+            return False, (f"expected type {expected_type}, "
+                           f"got {type(value).__name__}")
+    if expected_type == "object":
+        for required in schema.get("required", []):
+            if required not in value:
+                return False, f"missing required key {required!r}"
+        for k, sub in (schema.get("properties") or {}).items():
+            if k in value:
+                ok, msg = _minimal_validate(value[k], sub)
+                if not ok:
+                    return False, f"{k}: {msg}"
+    if expected_type == "array":
+        items_schema = schema.get("items")
+        if items_schema:
+            for i, item in enumerate(value):
+                ok, msg = _minimal_validate(item, items_schema)
+                if not ok:
+                    return False, f"[{i}]: {msg}"
+    return True, ""

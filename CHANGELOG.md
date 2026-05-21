@@ -8,6 +8,31 @@ versioning follows [SemVer](https://semver.org/spec/v2.0.0.html).
 
 (no unreleased changes)
 
+## [0.4.0] - 2026-05-21
+
+### Added
+
+- **`debate`** primitive -- multi-agent debate (Du, Li, Mordatch 2023,
+  arxiv 2305.14325). N agents draft, revise after seeing each other's
+  drafts, R rounds. Optional judge or automatic convergence-based winner.
+  Same-model debate (different personas) or cross-model debate supported.
+- **Tracing instrumentation.** Every primitive accepts an optional
+  `tracer=` kwarg. Three built-in implementations: `NoOpTracer` (default,
+  zero overhead), `LoggingTracer` (records spans + events in memory),
+  `CallbackTracer` (forward to any external sink -- Langfuse, Phoenix,
+  OpenTelemetry). The `Tracer` protocol is six methods; bring your own.
+- **`json_schema_critic(schema)`** -- Reflexion critic that validates
+  output is JSON matching a schema. Uses `jsonschema` if installed,
+  minimal type + required-keys fallback otherwise. Strips Markdown fences.
+- **Documentation site** at https://NORTHTEKDevs.github.io/sextant/
+  (mkdocs-material, GitHub Pages, auto-published on docs/ changes).
+
+### Stats
+
+- 99 tests passing (up from 72)
+- 7 primitives, full sync + async parity (except `debate` async, on the roadmap)
+- 5+ provider adapters
+
 ## [0.3.0] - 2026-05-21
 
 ### Added
