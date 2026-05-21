@@ -1,11 +1,17 @@
 # sextant
 
-**Four reliability primitives for any LLM API.** No new framework, no SDK
-lock-in -- just four small modules that wrap whatever provider you already
+[![CI](https://github.com/NORTHTEKDevs/sextant/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/NORTHTEKDevs/sextant/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue)](https://github.com/NORTHTEKDevs/sextant)
+
+**Five reliability primitives for any LLM API.** No new framework, no SDK
+lock-in -- just five small modules that wrap whatever provider you already
 use (OpenAI, Anthropic, Gemini, Groq, vLLM, local llama.cpp, anything).
 
 ```bash
-pip install sextant
+pip install sextant            # once published to PyPI
+# or until then:
+pip install git+https://github.com/NORTHTEKDevs/sextant.git
 ```
 
 ```python
@@ -378,18 +384,61 @@ These are deliberate. Sextant is a small library, not a framework.
 
 ---
 
+## CLI
+
+For a quick spin without writing code, `sextant` ships with a tiny CLI:
+
+```bash
+# Offline (uses the deterministic echo stub):
+python -m sextant cove "Who painted the Mona Lisa?"
+python -m sextant self_consistency "What is 2+2?" --n 3
+
+# With a real provider (OpenAI):
+OPENAI_API_KEY=sk-... python -m sextant cove "Where was Marie Curie born?"
+OPENAI_API_KEY=sk-... python -m sextant self_consistency \
+    "Janet has 16 eggs..." --n 5 --extractor last_number
+```
+
+Pass `--help` for the full list of subcommands and flags.
+
+---
+
 ## Development
 
 ```bash
 git clone https://github.com/NORTHTEKDevs/sextant.git
 cd sextant
 pip install -e .[dev]
-pytest tests/                          # ~2s; no network calls.
+pytest tests/                          # ~6s; no network calls.
 ruff check .
 ```
 
 Tests use deterministic stub `CompleteFn` / `EmbedFn` callables. No API
 keys required.
+
+---
+
+## Releasing to PyPI
+
+Sextant uses [PyPI Trusted Publishing](https://docs.pypi.org/trusted-publishers/)
+(OIDC, no manual token). Tag-driven release flow:
+
+```bash
+git tag v0.2.1
+git push origin v0.2.1
+# .github/workflows/release.yml builds + publishes automatically
+```
+
+One-time setup on PyPI (maintainers only):
+
+1. Sign in at https://pypi.org and go to **Account settings → Publishing**.
+2. Click **Add a new pending publisher** and fill in:
+   - PyPI Project Name: `sextant`
+   - Owner: `NORTHTEKDevs`
+   - Repository name: `sextant`
+   - Workflow filename: `release.yml`
+   - Environment name: `pypi`
+3. The next tag push will publish automatically.
 
 ---
 

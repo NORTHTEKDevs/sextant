@@ -4,6 +4,16 @@ All notable changes to this project are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/);
 versioning follows [SemVer](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- **CLI:** `python -m sextant cove "<query>"` (also `self_consistency`,
+  `best_of_n`, `drift`). Works offline against the echo stub or with
+  `OPENAI_API_KEY` against gpt-4o-mini. Supports `--json` for piping.
+- README badges (CI, license, Python version) and a clear "Releasing to
+  PyPI" section documenting the trusted-publisher setup.
+
 ## [0.2.0] - 2026-05-21
 
 ### Added
