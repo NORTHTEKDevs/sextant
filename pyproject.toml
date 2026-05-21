@@ -1,0 +1,61 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sextant"
+version = "0.1.0"
+description = "Four reliability primitives for any LLM API: Chain-of-Verification, self-consistency, prompt-drift detection, hedged execution."
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Kristian Baer", email = "info@northtek.io"},
+]
+requires-python = ">=3.10"
+keywords = [
+    "llm", "ai", "reliability", "chain-of-verification", "cove",
+    "self-consistency", "drift-detection", "hedged-execution",
+    "openai", "anthropic",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "numpy>=1.24",
+]
+
+[project.optional-dependencies]
+openai = ["openai>=1.0"]
+anthropic = ["anthropic>=0.30"]
+dev = [
+    "pytest>=7",
+    "ruff>=0.5",
+]
+
+[project.urls]
+Homepage = "https://github.com/NORTHTEKDevs/sextant"
+Source = "https://github.com/NORTHTEKDevs/sextant"
+Issues = "https://github.com/NORTHTEKDevs/sextant/issues"
+
+[tool.setuptools.packages.find]
+include = ["sextant*"]
+exclude = ["tests*", "examples*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+ignore = ["E501"]  # line-too-long is fine; we check by eye
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q --strict-markers"
