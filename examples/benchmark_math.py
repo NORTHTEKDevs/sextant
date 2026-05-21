@@ -14,7 +14,6 @@ import re
 import sys
 import time
 
-
 PROBLEMS = [
     {
         "q": ("Janet's ducks lay 16 eggs per day. She eats three for "
@@ -82,6 +81,7 @@ def main() -> None:
         print("set OPENAI_API_KEY", file=sys.stderr)
         sys.exit(2)
     from openai import OpenAI
+
     from sextant import self_consistency
     from sextant.adapters import openai_complete
 

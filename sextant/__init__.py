@@ -21,15 +21,23 @@ Quick start:
 """
 
 from sextant.best_of_n import (
-    BestOfNResult, ScoreFn, best_of_n,
-    keyword_scorer, length_scorer, llm_judge_scorer,
+    BestOfNResult,
+    ScoreFn,
+    best_of_n,
+    keyword_scorer,
+    length_scorer,
+    llm_judge_scorer,
 )
 from sextant.cove import CoVeResult, CoVeStep, cove
 from sextant.drift import DriftDetector, DriftSample
 from sextant.hedged import HedgeResult, race
 from sextant.self_consistency import SelfConsistencyResult, self_consistency
 from sextant.types import (
-    AsyncCompleteFn, AsyncEmbedFn, CompleteFn, EmbedFn, Message,
+    AsyncCompleteFn,
+    AsyncEmbedFn,
+    CompleteFn,
+    EmbedFn,
+    Message,
 )
 
 __version__ = "0.2.0"

@@ -15,6 +15,7 @@ def main() -> None:
         print("set OPENAI_API_KEY", file=sys.stderr)
         sys.exit(2)
     from openai import OpenAI
+
     from sextant import cove
     from sextant.adapters import openai_complete
 
@@ -26,7 +27,7 @@ def main() -> None:
     print("BASELINE:")
     print(r.baseline)
     print("\nVERIFICATION:")
-    for q, a in zip(r.questions, r.answers):
+    for q, a in zip(r.questions, r.answers, strict=False):
         print(f"  Q: {q}\n  A: {a}")
     print(f"\nFINAL (revisions={r.revisions}):")
     print(r.final)

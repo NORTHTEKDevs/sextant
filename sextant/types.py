@@ -13,7 +13,8 @@ these callables.
 
 from __future__ import annotations
 
-from typing import Any, Awaitable, Callable, TypedDict
+from collections.abc import Awaitable, Callable
+from typing import Any, TypedDict
 
 
 class Message(TypedDict, total=False):

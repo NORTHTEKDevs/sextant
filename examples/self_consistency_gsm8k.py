@@ -9,7 +9,6 @@ from __future__ import annotations
 import os
 import sys
 
-
 PROMPT = (
     "Janet's ducks lay 16 eggs per day. She eats three for breakfast every "
     "morning and bakes muffins with four. She sells the remainder at the "
@@ -24,6 +23,7 @@ def main() -> None:
         print("set OPENAI_API_KEY", file=sys.stderr)
         sys.exit(2)
     from openai import OpenAI
+
     from sextant import self_consistency
     from sextant.adapters import openai_complete
 

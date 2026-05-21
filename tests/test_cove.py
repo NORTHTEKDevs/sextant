@@ -3,8 +3,7 @@
 from __future__ import annotations
 
 from sextant.adapters import echo_complete
-from sextant.cove import cove
-from sextant.cove import _split_questions
+from sextant.cove import _split_questions, cove
 
 
 def test_cove_runs_full_pipeline_with_stub():

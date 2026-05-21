@@ -125,7 +125,7 @@ def cove(
         steps.append(CoVeStep(name="answer", content=a, raw_input=q))
 
     # 4. Final revision.
-    qa_block = "\n".join(f"Q: {q}\nA: {a}" for q, a in zip(questions, answers))
+    qa_block = "\n".join(f"Q: {q}\nA: {a}" for q, a in zip(questions, answers, strict=False))
     final_prompt = _FINAL_TEMPLATE.format(query=query, baseline=baseline,
                                             qa_block=qa_block)
     final = _ask(final_prompt)

@@ -20,23 +20,27 @@ from __future__ import annotations
 
 import asyncio
 import inspect
-import re
 import time
 from collections import Counter
-from dataclasses import dataclass, field
-from typing import Awaitable, Callable
+from collections.abc import Awaitable, Callable
 
 from sextant.best_of_n import BestOfNResult
-from sextant.cove import CoVeStep, CoVeResult, _split_questions
 from sextant.cove import (
-    _BASELINE_TEMPLATE, _PLAN_TEMPLATE, _ANSWER_TEMPLATE, _FINAL_TEMPLATE,
+    _ANSWER_TEMPLATE,
+    _BASELINE_TEMPLATE,
+    _FINAL_TEMPLATE,
+    _PLAN_TEMPLATE,
+    CoVeResult,
+    CoVeStep,
+    _split_questions,
 )
 from sextant.hedged import HedgeResult
 from sextant.self_consistency import (
-    SelfConsistencyResult, _extract, _semantic_vote,
+    SelfConsistencyResult,
+    _extract,
+    _semantic_vote,
 )
 from sextant.types import AsyncCompleteFn, AsyncEmbedFn, EmbedFn, Message
-
 
 # ---- Async CoVe ----------------------------------------------------------
 
@@ -77,12 +81,12 @@ async def acove(
         ])
     else:
         answers = []
-    for q, a in zip(questions, answers):
+    for q, a in zip(questions, answers, strict=False):
         steps.append(CoVeStep(name="answer", content=a, raw_input=q))
 
     # 4. Revise.
     qa_block = "\n".join(f"Q: {q}\nA: {a}"
-                          for q, a in zip(questions, answers))
+                          for q, a in zip(questions, answers, strict=False))
     final_prompt = _FINAL_TEMPLATE.format(query=query, baseline=baseline,
                                             qa_block=qa_block)
     final = await _ask(final_prompt)

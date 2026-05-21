@@ -18,6 +18,7 @@ def main() -> None:
 
     from anthropic import Anthropic
     from openai import OpenAI
+
     from sextant import race
     from sextant.adapters import anthropic_complete, openai_complete
 
@@ -36,7 +37,7 @@ def main() -> None:
     print(f"winner: {r.winner}")
     print(f"latency: {r.latency_ms:.0f}ms")
     print(f"value:\n{r.value}")
-    print(f"\nlosers:")
+    print("\nlosers:")
     for loser in r.losers:
         print(f"  {loser}")
 

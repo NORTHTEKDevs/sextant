@@ -33,11 +33,10 @@ best_of_n returns *all* scores so you can inspect why the winner won.
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import Callable
 
 from sextant.types import CompleteFn, Message
-
 
 ScoreFn = Callable[[str], float]
 """Map a candidate string to a scalar score. Higher = better."""

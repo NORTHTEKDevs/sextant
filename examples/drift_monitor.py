@@ -9,7 +9,6 @@ from __future__ import annotations
 import os
 import sys
 
-
 PROMPTS = [
     "What's the weather in Anchorage tomorrow?",
     "Will it snow this weekend in Fairbanks?",
@@ -43,6 +42,7 @@ def main() -> None:
         print("set OPENAI_API_KEY", file=sys.stderr)
         sys.exit(2)
     from openai import OpenAI
+
     from sextant import DriftDetector
     from sextant.adapters import openai_embed
 

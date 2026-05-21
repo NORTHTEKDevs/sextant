@@ -11,7 +11,7 @@ gated behind an import-time check; you only need the SDKs you use.
 
 from __future__ import annotations
 
-from typing import Any, Callable
+from typing import Any
 
 from sextant.types import CompleteFn, EmbedFn, Message
 

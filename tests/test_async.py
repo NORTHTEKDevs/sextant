@@ -15,8 +15,7 @@ import time
 
 import pytest
 
-from sextant.asyncio import abest_of_n, acove, aself_consistency, arace
-
+from sextant.asyncio import abest_of_n, acove, arace, aself_consistency
 
 # ---- helpers --------------------------------------------------------------
 

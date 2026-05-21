@@ -6,7 +6,10 @@ import pytest
 
 from sextant.adapters import varying_echo_complete
 from sextant.best_of_n import (
-    best_of_n, keyword_scorer, length_scorer, llm_judge_scorer,
+    best_of_n,
+    keyword_scorer,
+    length_scorer,
+    llm_judge_scorer,
 )
 
 
