@@ -11,8 +11,8 @@ lock-in -- just small modules that wrap whatever provider you already use
 Docs: **https://NORTHTEKDevs.github.io/lemmas/**
 
 ```bash
-pip install lemmas            # once published to PyPI
-# or until then:
+pip install lemmas
+# or straight from the repo:
 pip install git+https://github.com/NORTHTEKDevs/lemmas.git
 ```
 
