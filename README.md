@@ -28,7 +28,7 @@ print(result.baseline)     # original first draft
 print(result.questions)    # what the model asked itself
 ```
 
-That's the whole API surface for one primitive. There are four of them.
+That's the whole API surface for one primitive. There are seven of them.
 
 ---
 
@@ -62,7 +62,7 @@ Modern LLM platforms (LangChain, LlamaIndex, LiteLLM, etc.) give you
 reliability methods from the research literature. You end up reimplementing
 CoVe and self-consistency by hand in every project.
 
-These four primitives are the ones I've reached for repeatedly. Together
+Four of the seven are the ones I've reached for repeatedly. Together
 they cover:
 
 - **factuality at inference time** (CoVe)
