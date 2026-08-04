@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "lemmas"
 version = "0.4.0"
-description = "Four reliability primitives for any LLM API: Chain-of-Verification, self-consistency, prompt-drift detection, hedged execution."
+description = "Seven reliability primitives for any LLM API: Chain-of-Verification, self-consistency, best-of-N, reflexion, debate, drift detection, hedged execution."
 readme = "README.md"
 license = {text = "MIT"}
 authors = [
