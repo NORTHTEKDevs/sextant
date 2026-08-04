@@ -70,7 +70,7 @@ they cover:
 - **observability of behavior change** (drift)
 - **tail-latency control** (hedged execution)
 
-Each one is ~150 lines. The whole library is < 1 kLoC. No magic, no
+Each primitive is a couple hundred lines; the library is ~2.4 kLoC total. No magic, no
 dependencies beyond numpy.
 
 ---
